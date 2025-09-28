@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "my-mandarin-database"
+version = "0.1.0"
+description = ""
+authors = ["scott"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pandas = "^2.2.3"
+scikit-learn = "^1.6.0"
+scipy = "^1.14.1"
+jupyter = "^1.1.1"
+seaborn = "^0.13.2"
+pillow = "^11.1.0"
+moviepy = "^2.2.1"
+gTTS = "^2.5.4"
+pydub = "^0.25.1"
+audioop-lts = "^0.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
