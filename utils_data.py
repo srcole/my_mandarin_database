@@ -4,20 +4,12 @@ import os
 from constants import default_settings
 
 
-def fill_default_settings(dict_recordings):
-    df_all_recordings_tomake = pd.DataFrame(dict_recordings)
+def fill_default_settings(data_settings):
     for setting_key, setting_default in default_settings.items():
-        if setting_key not in df_all_recordings_tomake.columns:
-            df_all_recordings_tomake[setting_key] = [setting_default]*len(df_all_recordings_tomake)
-        else:
-            if setting_key in ['sort_keys', 'sort_asc', 'cat1_values_allowed', 'categories_allowed', 'categories2_allowed', 'types_allowed']:
-                df_all_recordings_tomake[setting_key] = df_all_recordings_tomake[setting_key].apply(lambda d: d if isinstance(d, list) else setting_default)
-            else:
-                if setting_default is not None:
-                    df_all_recordings_tomake[setting_key] = df_all_recordings_tomake[setting_key].fillna(setting_default)
-
-    df_all_recordings_tomake['recording_name'] = df_all_recordings_tomake.apply(lambda x: f"{datetime.date.today().strftime("%m%d")}_{x['recording_id']}_{x['filename_suffix']}", axis=1)
-    return df_all_recordings_tomake
+        if setting_key not in data_settings.keys():
+            data_settings[setting_key] = setting_default
+    data_settings['recording_name'] = f"{datetime.date.today().strftime("%m%d")}_{data_settings['recording_id']}_{data_settings['filename_suffix']}"
+    return data_settings
 
 
 def load_raw_data():
@@ -33,7 +25,7 @@ def load_raw_data():
     df = df.dropna(subset=['chinese', 'english'])
     df['known_english_prompt'] = df['known_english_prompt'].fillna(6)
     df['known_pinyin_prompt'] = df['known_pinyin_prompt'].fillna(6)
-    df['quality'] = df['quality'].fillna(5)
+    df['quality'] = df['quality'].fillna(6)
     df['per'] = df['per'].fillna(5)
     df['adu'] = df['adu'].fillna(5)
     df['date'] = df['date'].fillna('2025-01-02')
@@ -55,14 +47,14 @@ def _filter_by_recording_type(df, recording_id):
         return df.dropna(subset=['sentence', 'sentence_english'])
     elif recording_id == '006':
         return df.dropna(subset=['word1', 'word1_english', 'word2', 'word2_english'])
-    elif recording_id == '013':
+    elif recording_id in ['ceword_components_cesent', 'ceword_components_csent']:
         return df.dropna(subset=['word1', 'word1_english', 'word2', 'word2_english', 'sentence'])
     elif recording_id == '007':
         return df[df['date'] >= '2025-07-15'].dropna(subset=['sentence', 'sentence_english'])
     elif recording_id == '008':
         return df[df['date'] >= '2025-07-15']
     else:
-        raise ValueError("Invalid recording ID")
+        raise ValueError(f"Invalid recording ID: {recording_id}")
     
 
 def filter_df_to_vocab_of_interest(df, rrow):

@@ -220,6 +220,36 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
+    elif recording_id == 'ceword_components_csent':
+        texts_dict = {
+        'chinese': {
+            'text': f"{row['chinese']} ({row['pinyin']})",
+            'save_clip': True,
+            'duration': row['start_component_words'] - row['start'],
+            'timestamp_start': row['start'],
+            },
+        'component_words': {'text': create_component_words_text(row),
+            'save_clip': True,
+            'duration': row['start_english'] - row['start_component_words'],
+            'timestamp_start': row['start_component_words'],
+            },
+        'english': {'text': row['english'],
+            'save_clip': True,
+            'duration': row['start_sent'] - row['start_english'],
+            'timestamp_start': row['start_english'],
+            },
+        'sentence_chinese': {'text': row['sentence'],
+            'save_clip': False},
+        'sentence_pinyin': {'text': row['sentence_pinyin'],
+            'save_clip': False,
+            },
+        'sentence_english': {'text': row['sentence_english'],
+            'save_clip': True,
+            'duration': row['end'] - row['start_sent'],
+            'timestamp_start': row['start_sent'],
+            },
+    }
+
     elif recording_id == 'ecword':
         texts_dict = {
         'english': {'text': row['english'],
@@ -288,7 +318,7 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
                 texts_dict[text_id][config_key] = config_value
 
     # Draw line between word and sentence
-    if recording_id in ['ceword_csent', 'ceword_components_cesent']:
+    if recording_id in ['ceword_csent', 'ceword_components_cesent', 'ceword_components_csent']:
         draw.line([
             (video_configs['sentence_line']['x'], video_configs['sentence_line']['y']),
             (video_configs['bg_size'][0] - video_configs['sentence_line']['x'], video_configs['sentence_line']['y'])],
@@ -297,7 +327,7 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             joint=None)
     
     # Decrease component size if 3+ components
-    if recording_id in ['ceword_components_cesent']:
+    if recording_id in ['ceword_components_cesent', 'ceword_components_csent']:
         texts_dict['component_words']['font_size'] = compute_components_font_size(
             row, texts_dict['component_words']['font_size'])
 
