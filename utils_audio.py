@@ -2,6 +2,7 @@ import pandas as pd
 from collections import defaultdict
 import os
 from gtts import gTTS
+from edge_tts import list_voices, Communicate
 from moviepy import AudioFileClip
 from pydub import AudioSegment
 from pydub.exceptions import CouldntDecodeError
@@ -10,13 +11,27 @@ import time
 from utils_data import pinyin_to_tones
 
 
-def create_tts_file(tts_type, content_str, lang_name, last_timestamp, chinese_char, recording_id):
-    if tts_type == 'zh_slow':
+def single_tts_call(text, voice_name, output_file_name):
+    if voice_name in ['en', 'zh']:
+        single_gtts_call(text, voice_name, output_file_name)
+    else:
+        communicate = Communicate(text, voice_name)
+        communicate.save_sync(output_file_name)
+
+
+def single_gtts_call(content_str, lang_name, slow_mode, new_file_path):
+    if lang_name == 'zh_slow':
         slow_mode = True
+        lang_name = 'zh'
     else:
         slow_mode = False
+    gTTS(content_str, lang=lang_name, slow=slow_mode).save(new_file_path)
 
-    new_file_path = f"output/{tts_type}/{content_str}.mp3"
+
+def create_tts_file(content_str, lang_name, last_timestamp, chinese_char, recording_id):
+
+
+    new_file_path = f"output/tts/{lang_name}/{content_str}.mp3"
     if not os.path.exists(new_file_path):
         # Delete final row file, if exists, since will have to rewrite it
         row_file_path = f"output/rows/{recording_id}/{chinese_char}.mp3"
@@ -24,53 +39,50 @@ def create_tts_file(tts_type, content_str, lang_name, last_timestamp, chinese_ch
             os.remove(row_file_path)
         
         try:
-            gTTS(content_str, lang=lang_name, slow=slow_mode).save(new_file_path)
+            single_tts_call(content_str, lang_name, new_file_path)
         except:
-            # Wait 60 seconds and try again
-            print(f"!!!!!!! FAILURE, wait 52 seconds, {tts_type}, {content_str} !!!!!!!")
+            print(f"!!!!!!! FAILURE, wait 52 seconds, {lang_name}, {content_str} !!!!!!!")
             time.sleep(52)
             try:
-                gTTS(content_str, lang=lang_name, slow=slow_mode).save(new_file_path)
+                single_tts_call(content_str, lang_name, new_file_path)
             except:
-                # Wait 60 seconds and try again
-                print(f"!!!!!!!!!! FAILURE AGAIN, wait 278 seconds, {tts_type}, {content_str} !!!!!!!!!!")
+                print(f"!!!!!!!!!! FAILURE AGAIN, wait 278 seconds, {lang_name}, {content_str} !!!!!!!!!!")
                 time.sleep(278)
-                gTTS(content_str, lang=lang_name, slow=slow_mode).save(new_file_path)
-        print(f"{(time.time()-last_timestamp):.3f}s, {tts_type}, {content_str}")
+                single_tts_call(content_str, lang_name, new_file_path)
+        print(f"{(time.time()-last_timestamp):.3f}s, {lang_name}, {content_str}")
     else:
-        print(f"{(time.time()-last_timestamp):.3f}s, ALREADY EXISTS, {tts_type}, {content_str}")
+        print(f"{(time.time()-last_timestamp):.3f}s, ALREADY EXISTS, {lang_name}, {content_str}")
 
 
-def create_tts_files_for_one_vocab_word(row, rrow):
-    create_tts_file(tts_type='zh', content_str=row['chinese'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-    create_tts_file(tts_type='zh_slow', content_str=row['chinese'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-    create_tts_file(tts_type='english', content_str=row['english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
+def create_tts_files_for_one_vocab_word(row, data_settings):
+    create_tts_file(content_str=row['chinese'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+    create_tts_file(content_str=row['english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
-    if rrow['recording_id'] in ['001', '007', '009', 'ceword_components_cesent', 'ce_wordsent', 'cword_cecomponent_cesent_notes', 'ceword_components_csent']:
-        create_tts_file(tts_type='zh', content_str=row['sentence'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-        create_tts_file(tts_type='english', content_str=row['sentence_english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
+    if data_settings['recording_id'] in ['001', '007', '009', 'ceword_components_cesent', 'ce_wordsent', 'cword_cecomponent_cesent_notes', 'ceword_components_csent']:
+        create_tts_file(content_str=row['sentence'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+        create_tts_file(content_str=row['sentence_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
-    if rrow['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent']:
-        create_tts_file(tts_type='zh', content_str=row['sentence'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
+    if data_settings['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent']:
+        create_tts_file(content_str=row['sentence'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
-    if rrow['recording_id'] in ['ceword_components_cesent', '006', 'ceword_components_csent']:
-        create_tts_file(tts_type='zh', content_str=row['word1'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-        create_tts_file(tts_type='zh', content_str=row['word2'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-        create_tts_file(tts_type='english', content_str=row['word1_english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-        create_tts_file(tts_type='english', content_str=row['word2_english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
+    if data_settings['recording_id'] in ['ceword_components_cesent', '006', 'ceword_components_csent']:
+        create_tts_file(content_str=row['word1'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+        create_tts_file(content_str=row['word2'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+        create_tts_file(content_str=row['word1_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+        create_tts_file(content_str=row['word2_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         if not pd.isna(row['word3']):
-            create_tts_file(tts_type='zh', content_str=row['word3'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-            create_tts_file(tts_type='english', content_str=row['word3_english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
+            create_tts_file(content_str=row['word3'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+            create_tts_file(content_str=row['word3_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         if not pd.isna(row['word4']):
-            create_tts_file(tts_type='zh', content_str=row['word4'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
-            create_tts_file(tts_type='english', content_str=row['word4_english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
+            create_tts_file(content_str=row['word4'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+            create_tts_file(content_str=row['word4_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
 
 def compute_pinyin_and_create_recordings(df_words):
     # Make pinyin audio, if needed
     pinyin_tones = ['1', '2', '3', '4']
     for tone_str in pinyin_tones:
-        gTTS(tone_str, lang='en').save(f"output/english/{tone_str}.mp3")
+        single_tts_call(tone_str, 'en', False, f"output/english/{tone_str}.mp3")
 
     # Compute pinyin tones for each character
     df_words['pinyin_tones'] = df_words['pinyin'].apply(pinyin_to_tones)
@@ -87,7 +99,7 @@ def load_one_audio_from_path(mp3_path):
     return audio
 
 
-def load_audio(recording_id, row):
+def load_audio(row, data_settings):
     pause_100ms = AudioSegment.silent(duration=100)
     pause_300ms = AudioSegment.silent(duration=300)
     pause_500ms = AudioSegment.silent(duration=500)
@@ -95,14 +107,13 @@ def load_audio(recording_id, row):
     pause_1000ms = AudioSegment.silent(duration=1000)
 
     dict_audio_durations = defaultdict(list)
-    chinese_audio = load_one_audio_from_path(f"output/zh/{row['chinese']}.mp3")
-    chinese_slow_audio = load_one_audio_from_path(f"output/zh_slow/{row['chinese']}.mp3")
-    english_audio = load_one_audio_from_path(f"output/english/{row['english']}.mp3")
+    chinese_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['chinese']}.mp3")
+    english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['english']}.mp3")
     
-    if recording_id in ['001', '007', '009', 'ce_wordsent']:
-        sent_audio = load_one_audio_from_path(f"output/zh/{row['sentence']}.mp3")
-        sent_english_audio = load_one_audio_from_path(f"output/english/{row['sentence_english']}.mp3")
-        combined = chinese_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_500ms + sent_audio + pause_1000ms
+    if data_settings['recording_id'] in ['001', '007', '009', 'ce_wordsent']:
+        sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
+        sent_english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['sentence_english']}.mp3")
+        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_500ms + sent_audio + pause_1000ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -112,7 +123,7 @@ def load_audio(recording_id, row):
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
-        dict_audio_durations['d_chinese_slow'].append(chinese_slow_audio.duration_seconds)
+        dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
         dict_audio_durations['d_sent_english'].append(sent_english_audio.duration_seconds)
@@ -125,18 +136,18 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent_english'][-1] + dict_audio_durations['d_sent_english'][-1] + dict_audio_durations['d_sent'][-1] + 1.5)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['002', '011']:
-        sent_audio = load_one_audio_from_path(f"output/zh/{row['sentence']}.mp3")
-        combined = chinese_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_audio + pause_1000ms
+    elif data_settings['recording_id'] in ['002', '011']:
+        sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
+        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_audio + pause_1000ms
 
-    elif recording_id in ['004', '008', '010', '014']:
-        combined = chinese_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_1000ms
+    elif data_settings['recording_id'] in ['004', '008', '010', '014']:
+        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_1000ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
-        dict_audio_durations['d_chinese_slow'].append(chinese_slow_audio.duration_seconds)
+        dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
 
         dict_audio_durations['rel_start_chinese'].append(0)
@@ -144,14 +155,14 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['016']:
-        combined = english_audio + pause_500ms + chinese_audio + pause_300ms + chinese_slow_audio + pause_1000ms
+    elif data_settings['recording_id'] in ['016']:
+        combined = english_audio + pause_500ms + chinese_audio + pause_300ms + chinese_audio + pause_1000ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
-        dict_audio_durations['d_chinese_slow'].append(chinese_slow_audio.duration_seconds)
+        dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
 
         dict_audio_durations['rel_start_english'].append(0)
@@ -159,32 +170,32 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1.3)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id == '005':
+    elif data_settings['recording_id'] == '005':
         tones_audio = AudioSegment.silent(duration=0)
         for pinyin_tone in row['pinyin_tones']:
-            tones_audio += load_one_audio_from_path(f"output/english/{pinyin_tone}.mp3")
+            tones_audio += load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{pinyin_tone}.mp3")
             tones_audio += pause_100ms
 
-        combined = chinese_audio + pause_500ms + tones_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + tones_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_1000ms
 
-    elif recording_id == '006':
-        word1_audio = load_one_audio_from_path(f"output/zh/{row['word1']}.mp3")
-        word1e_audio = load_one_audio_from_path(f"output/english/{row['word1_english']}.mp3")
-        word2_audio = load_one_audio_from_path(f"output/zh/{row['word2']}.mp3")
-        word2e_audio = load_one_audio_from_path(f"output/english/{row['word2_english']}.mp3")
+    elif data_settings['recording_id'] == '006':
+        word1_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word1']}.mp3")
+        word1e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word1_english']}.mp3")
+        word2_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word2']}.mp3")
+        word2e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word2_english']}.mp3")
         if not pd.isna(row['word3']):
-            word3_audio = load_one_audio_from_path(f"output/zh/{row['word3']}.mp3")
-            word3e_audio = load_one_audio_from_path(f"output/english/{row['word3_english']}.mp3")
+            word3_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word3']}.mp3")
+            word3e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word3_english']}.mp3")
         if not pd.isna(row['word4']):
-            word4_audio = load_one_audio_from_path(f"output/zh/{row['word4']}.mp3")
-            word4e_audio = load_one_audio_from_path(f"output/english/{row['word4_english']}.mp3")
+            word4_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word4']}.mp3")
+            word4e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word4_english']}.mp3")
 
         component_words_audio = word1_audio + pause_100ms + word1e_audio + pause_500ms + word2_audio + pause_100ms + word2e_audio
         if not pd.isna(row['word3']):
             component_words_audio += pause_500ms + word3_audio + pause_100ms + word3e_audio
         if not pd.isna(row['word4']):
             component_words_audio += pause_500ms + word4_audio + pause_100ms + word4e_audio
-        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_500ms
+        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -199,7 +210,7 @@ def load_audio(recording_id, row):
         dict_audio_durations['word4_english'].append(row['word4_english'] if not pd.isna(row['word4_english']) else '')
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_component_words'].append(component_words_audio.duration_seconds)
-        dict_audio_durations['d_chinese_slow'].append(chinese_slow_audio.duration_seconds)
+        dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
 
         dict_audio_durations['rel_start_chinese'].append(0)
@@ -209,26 +220,26 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['ceword_components_cesent']:
-        sent_audio = load_one_audio_from_path(f"output/zh/{row['sentence']}.mp3")
-        sent_english_audio = load_one_audio_from_path(f"output/english/{row['sentence_english']}.mp3")
-        word1_audio = load_one_audio_from_path(f"output/zh/{row['word1']}.mp3")
-        word1e_audio = load_one_audio_from_path(f"output/english/{row['word1_english']}.mp3")
-        word2_audio = load_one_audio_from_path(f"output/zh/{row['word2']}.mp3")
-        word2e_audio = load_one_audio_from_path(f"output/english/{row['word2_english']}.mp3")
+    elif data_settings['recording_id'] in ['ceword_components_cesent']:
+        sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
+        sent_english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['sentence_english']}.mp3")
+        word1_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word1']}.mp3")
+        word1e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word1_english']}.mp3")
+        word2_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word2']}.mp3")
+        word2e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word2_english']}.mp3")
         if not pd.isna(row['word3']):
-            word3_audio = load_one_audio_from_path(f"output/zh/{row['word3']}.mp3")
-            word3e_audio = load_one_audio_from_path(f"output/english/{row['word3_english']}.mp3")
+            word3_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word3']}.mp3")
+            word3e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word3_english']}.mp3")
         if not pd.isna(row['word4']):
-            word4_audio = load_one_audio_from_path(f"output/zh/{row['word4']}.mp3")
-            word4e_audio = load_one_audio_from_path(f"output/english/{row['word4_english']}.mp3")
+            word4_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word4']}.mp3")
+            word4e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word4_english']}.mp3")
 
         component_words_audio = word1_audio + pause_100ms + word1e_audio + pause_500ms + word2_audio + pause_100ms + word2e_audio
         if not pd.isna(row['word3']):
             component_words_audio += pause_500ms + word3_audio + pause_100ms + word3e_audio
         if not pd.isna(row['word4']):
             component_words_audio += pause_500ms + word4_audio + pause_100ms + word4e_audio
-        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_1000ms
 
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -247,7 +258,7 @@ def load_audio(recording_id, row):
         dict_audio_durations['word4_english'].append(row['word4_english'] if not pd.isna(row['word4_english']) else '')
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_component_words'].append(component_words_audio.duration_seconds)
-        dict_audio_durations['d_chinese_slow'].append(chinese_slow_audio.duration_seconds)
+        dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
         dict_audio_durations['d_sent_english'].append(sent_english_audio.duration_seconds)
@@ -261,25 +272,25 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent_english'][-1] + dict_audio_durations['d_sent_english'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['ceword_components_csent']:
-        sent_audio = load_one_audio_from_path(f"output/zh/{row['sentence']}.mp3")
-        word1_audio = load_one_audio_from_path(f"output/zh/{row['word1']}.mp3")
-        word1e_audio = load_one_audio_from_path(f"output/english/{row['word1_english']}.mp3")
-        word2_audio = load_one_audio_from_path(f"output/zh/{row['word2']}.mp3")
-        word2e_audio = load_one_audio_from_path(f"output/english/{row['word2_english']}.mp3")
+    elif data_settings['recording_id'] in ['ceword_components_csent']:
+        sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
+        word1_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word1']}.mp3")
+        word1e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word1_english']}.mp3")
+        word2_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word2']}.mp3")
+        word2e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word2_english']}.mp3")
         if not pd.isna(row['word3']):
-            word3_audio = load_one_audio_from_path(f"output/zh/{row['word3']}.mp3")
-            word3e_audio = load_one_audio_from_path(f"output/english/{row['word3_english']}.mp3")
+            word3_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word3']}.mp3")
+            word3e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word3_english']}.mp3")
         if not pd.isna(row['word4']):
-            word4_audio = load_one_audio_from_path(f"output/zh/{row['word4']}.mp3")
-            word4e_audio = load_one_audio_from_path(f"output/english/{row['word4_english']}.mp3")
+            word4_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word4']}.mp3")
+            word4e_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['word4_english']}.mp3")
 
         component_words_audio = word1_audio + pause_100ms + word1e_audio + pause_500ms + word2_audio + pause_100ms + word2e_audio
         if not pd.isna(row['word3']):
             component_words_audio += pause_500ms + word3_audio + pause_100ms + word3e_audio
         if not pd.isna(row['word4']):
             component_words_audio += pause_500ms + word4_audio + pause_100ms + word4e_audio
-        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_slow_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_1000ms
 
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -298,7 +309,7 @@ def load_audio(recording_id, row):
         dict_audio_durations['word4_english'].append(row['word4_english'] if not pd.isna(row['word4_english']) else '')
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_component_words'].append(component_words_audio.duration_seconds)
-        dict_audio_durations['d_chinese_slow'].append(chinese_slow_audio.duration_seconds)
+        dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
 
@@ -310,8 +321,8 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['012', 'ec_csent']:
-        sent_audio = AudioSegment.from_mp3(f"output/zh/{row['sentence']}.mp3")
+    elif data_settings['recording_id'] in ['012', 'ec_csent']:
+        sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         combined = english_audio + pause_500ms + chinese_audio + pause_500ms + sent_audio + pause_1000ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -331,8 +342,8 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['ec_csent']:
-        sent_audio = AudioSegment.from_mp3(f"output/zh/{row['sentence']}.mp3")
+    elif data_settings['recording_id'] in ['ec_csent']:
+        sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         combined = chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_1000ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -352,8 +363,8 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['015', 'cn_only_sent']:
-        sent_audio = AudioSegment.from_mp3(f"output/zh/{row['sentence']}.mp3")
+    elif data_settings['recording_id'] in ['015', 'cn_only_sent']:
+        sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         combined = chinese_audio + pause_300ms + sent_audio + pause_1000ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -371,22 +382,22 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id == 'chinese_only_word_twice':
-        sent_audio = AudioSegment.from_mp3(f"output/zh/{row['sentence']}.mp3")
-        combined = chinese_audio + pause_300ms + chinese_slow_audio + pause_750ms
+    elif data_settings['recording_id'] == 'chinese_only_word_twice':
+        sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
+        combined = chinese_audio + pause_300ms + chinese_audio + pause_750ms
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
 
-        dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + chinese_slow_audio.duration_seconds + 0.3)
+        dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + chinese_audio.duration_seconds + 0.3)
 
         dict_audio_durations['rel_start_chinese'].append(0)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['d_chinese'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     else:
-        raise ValueError(f"Invalid recording_id: {recording_id}")
+        raise ValueError(f"Invalid recording_id: {data_settings['recording_id']}")
     
     df_audio_durations = pd.DataFrame(dict_audio_durations)
     return combined, df_audio_durations
@@ -430,22 +441,22 @@ def compute_start_times_for_clips(df_durations, recording_settings):
     return df_durations
 
 
-def combine_audio_files_and_compute_durations(df_words, recording_settings, making_video=True):
+def combine_audio_files_and_compute_durations(df_words, data_settings, making_video=True):
     dfs_audio_durations = []
     for i_row, row in df_words.iterrows():
         start_time = time.time()
-        new_folder_path = f"output/rows/{recording_settings['recording_id']}"
+        new_folder_path = f"output/rows/{data_settings['recording_id']}"
         new_file_path = f"{new_folder_path}/{row['chinese']}.mp3"
         os.makedirs(new_folder_path, exist_ok=True)
 
         # Only compute if making video or does not exist
         if making_video or (not os.path.exists(new_file_path)):
-            combined, df_audio_durations_onerow = load_audio(recording_settings['recording_id'], row)
+            combined, df_audio_durations_onerow = load_audio(row, data_settings)
             dfs_audio_durations.append(df_audio_durations_onerow)
             combined.export(new_file_path, format="mp3")
-            print(f"{(time.time()-start_time):.2f} seconds, recid{recording_settings['recording_name']}, row {i_row}, {row['chinese']}")
+            print(f"{(time.time()-start_time):.2f} seconds, recid{data_settings['recording_name']}, row {i_row}, {row['chinese']}")
         else:
-            print(f"{(time.time()-start_time):.2f} seconds, recid{recording_settings['recording_name']}, row {i_row}, {row['chinese']} ALREADY EXISTS")
+            print(f"{(time.time()-start_time):.2f} seconds, recid{data_settings['recording_name']}, row {i_row}, {row['chinese']} ALREADY EXISTS")
 
     # Add in static slide audio into dataframe of audio durations
     df_durations = pd.concat(dfs_audio_durations, ignore_index=True)
@@ -472,7 +483,7 @@ def generate_nonvocab_audio_and_compute_durations(data_settings, df_vocab_audio_
         # Generate audio if not already exists
         nv_settings['file_path'] = f"{project_artifacts_folder}/{nv_settings['chinese']}.mp3"
         if not os.path.exists(nv_settings['file_path']):
-            gTTS(nv_settings['chinese'], lang='zh').save(nv_settings['file_path'])
+            single_tts_call(nv_settings['chinese'], data_settings['voice_name_zh'], nv_settings['file_path'])
             print(f'Generated {nv_settings['chinese']}')
         else:
             print(f'{nv_name} audio already generated: {nv_settings['chinese']}')
@@ -562,3 +573,49 @@ def create_final_audio_from_each_word_and_nonvocab(df_vocab_audio_durations, pro
     audio_concat.export(f"{project_artifacts_folder}/audio.mp3", format="mp3")
     print(f"{(time.time()-start_time):.2f}s, {project_artifacts_folder}/audio.mp3")
 
+
+def create_dataframe_edge_tts_voices():
+    # voices = await list_voices()
+    voices = list_voices()
+    voices = sorted(voices, key=lambda voice: voice["ShortName"])
+    dict_voice_list = defaultdict(list)
+    for voice in voices:
+        dict_voice_list['name'].append(voice['ShortName'])
+        dict_voice_list['language'].append(voice['ShortName'].split('-')[0])
+        dict_voice_list['country'].append(voice['ShortName'].split('-')[1])
+        dict_voice_list['gender'].append(voice['Gender'])
+        dict_voice_list['content_categories'].append(", ".join(voice["VoiceTag"]["ContentCategories"]))
+        dict_voice_list['personalities'].append(", ".join(voice["VoiceTag"]["VoicePersonalities"]))
+    df_voice_list = pd.DataFrame(dict_voice_list)
+    # print(len(df_voice_list))
+    # df_voice_list[df_voice_list['language']=='zh'].to_csv('edge-tts_zh_options.csv')
+    # df_voice_list.head()
+    return df_voice_list
+
+
+def generate_example_recordings_from_all_edge_tts_voices(
+        example_sent, language, filter_gender=None, filter_country=None, filter_personality=None):
+    tts_example_path = f"output/tts/compare/{example_sent}"
+    if not os.path.exists(tts_example_path):
+        os.mkdir(tts_example_path)
+
+    df_tts = pd.read_csv(f'edge-tts_{language}_options.csv', index_col=0)
+    df_tts['personalities'] = df_tts['personalities'].fillna('NONE')
+
+    if filter_gender is not None:
+        df_tts = df_tts[df_tts['gender'].isin(filter_gender)]
+    if filter_country is not None:
+        df_tts = df_tts[df_tts['country'].isin(filter_country)]
+    if filter_personality is not None:
+        df_tts = df_tts[df_tts['personalities'].str.contains(filter_personality)]
+    df_tts = df_tts[(~df_tts['name'].str.contains('DragonHD'))].reset_index(drop=True)
+
+    start_time = time.time()
+    for _, row in df_tts.iterrows():
+        audio_path = f"{tts_example_path}/{row['gender']}_{row['country']}_{row['personalities']}_{row['name'].split('-')[-1].split(':')[0]}.mp3"
+        if not os.path.exists(audio_path):
+            communicate = Communicate(example_sent, row['name'])
+            communicate.save_sync(audio_path)
+            print(f"{(time.time() - start_time):.3f}s, {row['name']}")
+        else:
+            print(f"{(time.time() - start_time):.3f}s, ALREADY GENERATED, {row['name']}")
