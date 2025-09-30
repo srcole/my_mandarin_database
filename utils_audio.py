@@ -50,7 +50,7 @@ def create_tts_files_for_one_vocab_word(row, rrow):
         create_tts_file(tts_type='zh', content_str=row['sentence'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
         create_tts_file(tts_type='english', content_str=row['sentence_english'], lang_name='en', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
     
-    if rrow['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent', 'ceword_csent']:
+    if rrow['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent']:
         create_tts_file(tts_type='zh', content_str=row['sentence'], lang_name='zh-cn', last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=rrow['recording_id'])
     
     if rrow['recording_id'] in ['ceword_components_cesent', '006', 'ceword_components_csent']:
@@ -331,7 +331,7 @@ def load_audio(recording_id, row):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif recording_id in ['ceword_csent']:
+    elif recording_id in ['ec_csent']:
         sent_audio = AudioSegment.from_mp3(f"output/zh/{row['sentence']}.mp3")
         combined = chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_1000ms
 
@@ -521,7 +521,7 @@ def generate_nonvocab_audio_and_compute_durations(data_settings, df_vocab_audio_
         df_vocab_audio_durations['start_english'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_english']
         df_vocab_audio_durations['start_sent'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_sent']
         df_vocab_audio_durations['start_sent_english'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_sent_english']
-    elif data_settings['recording_id'] in ['ceword_csent', '012']:
+    elif data_settings['recording_id'] in ['ec_csent', '012']:
         df_vocab_audio_durations['start_english'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_english']
         df_vocab_audio_durations['start_chinese'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_chinese']
         df_vocab_audio_durations['start_sent'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_sent']

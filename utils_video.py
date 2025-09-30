@@ -278,18 +278,18 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
-    elif recording_id == 'ceword_csent':
+    elif recording_id == 'ec_csent':
         texts_dict = {
+        'english': {'text': row['english'],
+            'save_clip': True,
+            'duration': row['start_chinese'] - row['start'],
+            'timestamp_start': row['start'],
+            },
         'chinese': {
             'text': f"{row['chinese']} ({row['pinyin']})",
             'save_clip': True,
-            'duration': row['start_english'] - row['start'],
-            'timestamp_start': row['start'],
-            },
-        'english': {'text': row['english'],
-            'save_clip': True,
-            'duration': row['start_sent'] - row['start_english'],
-            'timestamp_start': row['start_english'],
+            'duration': row['start_sent'] - row['start_chinese'],
+            'timestamp_start': row['start_chinese'],
             },
         'sentence_chinese': {'text': row['sentence'],
             'save_clip': False},
@@ -318,7 +318,7 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
                 texts_dict[text_id][config_key] = config_value
 
     # Draw line between word and sentence
-    if recording_id in ['ceword_csent', 'ceword_components_cesent', 'ceword_components_csent']:
+    if recording_id in ['ec_csent', 'ceword_components_cesent', 'ceword_components_csent']:
         draw.line([
             (video_configs['sentence_line']['x'], video_configs['sentence_line']['y']),
             (video_configs['bg_size'][0] - video_configs['sentence_line']['x'], video_configs['sentence_line']['y'])],
@@ -360,7 +360,7 @@ def generate_intro_slide(video_configs, intro_configs, subtitle_text_configs, au
         intro_texts_dict[i_ts]['length_chinese'] = max([text_settings['font'].getlength(x) for x in text_settings['text_chinese'].split('\n')])
 
         draw.text(
-            xy=(video_configs['bg_size'][0]/4 - intro_texts_dict[i_ts]['length']/2, intro_configs['text_configs'][i_ts]['y']),
+            xy=(video_configs['bg_size'][0]/4 - intro_texts_dict[i_ts]['length']/2 + intro_configs['x_bias_english_side'], intro_configs['text_configs'][i_ts]['y']),
             text=intro_texts_dict[i_ts]['text'],
             font=intro_texts_dict[i_ts]['font'],
             fill=intro_configs['text_configs'][i_ts]['fill'],
@@ -503,3 +503,13 @@ def generate_outro_slide(video_configs, outro_configs, subtitle_text_configs, df
         align=subtitle_text_configs['align'],
         )
     return img
+
+
+def overlay_one_image_on_another(image_bottom_path, image_top_path, xy_offset, new_image_path):
+    im1 = Image.open(image_bottom_path)
+    im2 = Image.open(image_top_path)
+    if im2.mode != 'RGBA':
+        im2 = im2.convert('RGBA')
+    im1.paste(im2, xy_offset, im2)
+    im1.save(new_image_path)
+    return ImageClip(new_image_path, duration=1).with_start(0)
