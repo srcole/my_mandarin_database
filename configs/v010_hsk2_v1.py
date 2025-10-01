@@ -1,9 +1,9 @@
 from constants import ALL_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '497 HSK1 audio flash cards with example Chinese sentences in 50 minutes'
+video_name = '736 HSK2 audio flash cards with example Chinese sentences in ?? minutes'
 video_description = '''
-This video was made for quickly reviewing HSK1 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
+This video was made for quickly reviewing HSK2 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
 The English is spoken first, followed by the Chinese translation, and an example sentence in Chinese.
 Because these videos are programmatically generated, the format is customizable to quickly produce alternate formats with different vocabulary categories, so please let me know if you have any corrections, suggestions, feedback, or questions, please leave a comment.
 
@@ -13,8 +13,8 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 # Main settings  # UPDATE ON NEW VIDEO
 data_settings = {
     'recording_id': 'ec_csent',
-    'filename_suffix': 'hsk1_v1',
-    'different_file_name': 'static/hsk/HSK1_sent.csv',
+    'filename_suffix': 'hsk2_v1',
+    'different_file_name': 'static/hsk/HSK2_sent.csv',
     'custom_filters': [
         {'col_name': 'index', 'val': 0, 'operator_str': '>='},
         {'col_name': 'index', 'val': 999, 'operator_str': '<='},
@@ -24,7 +24,7 @@ data_settings = {
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
 }
-video_number = '9'
+video_number = '10'
 
 
 # Misc properties
@@ -124,16 +124,16 @@ video_configs = {
 # Video icon
 icon_configs = {
     'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-    'word': '车站', # UPDATE ON NEW VIDEO
+    'word': '友好', # UPDATE ON NEW VIDEO
     'border_color_hex': "#1E90FF",
     'border_width': 30,
 }
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': 'HSK1级音频卡片',
-    'pinyin': 'HSK1 jí yīnpín kǎpiàn',
-    'english': 'HSK1 audio flashcards'
+    'chinese': 'HSK2级音频卡片',
+    'pinyin': 'HSK2 jí yīnpín kǎpiàn',
+    'english': 'HSK2 audio flashcards'
     }  # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
@@ -206,28 +206,28 @@ nonvocab_slides = {
         'pause_ms': 500,
 
 
-        'y_top': 10,
-        'y_bottom': 100,
-        'x_top': 10,
-        'spacing': 2,
-        'font_size': 10,
+        'y_top': 4,
+        'y_bottom': 60,
+        'x_top': 4,
+        'spacing': 1,
+        'font_size': 8,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 2,
-        'col_space_big': 4,
+        'col_space': 1,
+        'col_space_big': 2,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 30, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 20, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 30, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 30, 'font_path': hanzi_font_path},
         },
     }
 }
 
 subtitle_text_configs = {
-    'font_size': 22,
+    'font_size': 5,
     'font_name': hanzi_font_path,
-    'y': 620,
-    'spacing': 10,
+    'y': 680,
+    'spacing': 5,
     'align': 'center',
     'fill': "#000000",
 }
