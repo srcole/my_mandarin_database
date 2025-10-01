@@ -30,8 +30,7 @@ def single_gtts_call(content_str, lang_name, slow_mode, new_file_path):
 
 def create_tts_file(content_str, lang_name, last_timestamp, chinese_char, recording_id):
 
-
-    new_file_path = f"output/tts/{lang_name}/{content_str}.mp3"
+    new_file_path = f"output/tts/{lang_name}/{content_str.replace('/', '-')}.mp3"
     if not os.path.exists(new_file_path):
         # Delete final row file, if exists, since will have to rewrite it
         row_file_path = f"output/rows/{recording_id}/{chinese_char}.mp3"
@@ -107,8 +106,8 @@ def load_audio(row, data_settings):
     pause_1000ms = AudioSegment.silent(duration=1000)
 
     dict_audio_durations = defaultdict(list)
-    chinese_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['chinese']}.mp3")
-    english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['english']}.mp3")
+    chinese_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['chinese'].replace('/', '-')}.mp3")
+    english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['english'].replace('/', '-')}.mp3")
     
     if data_settings['recording_id'] in ['001', '007', '009', 'ce_wordsent']:
         sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
@@ -551,7 +550,8 @@ def generate_nonvocab_audio_and_compute_durations(data_settings, df_vocab_audio_
 
     # Update nonvocab_slide settings info with duration and start
     for _, row in df_vocab_audio_durations.iterrows():
-        if row['nonvocab_key'] is not None:
+        if not pd.isna(row['nonvocab_key']):
+        # if row['nonvocab_key'] is not None:
             nonvocab_slides[row['nonvocab_key']]['duration'] = row['combined']
             nonvocab_slides[row['nonvocab_key']]['start'] = row['start']
     return df_vocab_audio_durations, audio_filler_variables, nonvocab_slides

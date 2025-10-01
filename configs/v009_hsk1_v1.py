@@ -1,7 +1,7 @@
 from constants import ALL_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = 'HSK1 audio flash cards (#51-100) with example Chinese sentences'
+video_name = '497 HSK1 audio flash cards with example Chinese sentences in 50 minutes'
 video_description = '''
 This video was made for quickly reviewing HSK1 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
 The English is spoken first, followed by the Chinese translation, and an example sentence in Chinese.
@@ -13,18 +13,18 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 # Main settings  # UPDATE ON NEW VIDEO
 data_settings = {
     'recording_id': 'ec_csent',
-    'filename_suffix': 'hsk1p2',
+    'filename_suffix': 'hsk1_v1',
     'different_file_name': 'static/hsk/HSK1_sent.csv',
     'custom_filters': [
-        {'col_name': 'index', 'val': 50, 'operator_str': '>='},
-        {'col_name': 'index', 'val': 99, 'operator_str': '<='},
+        {'col_name': 'index', 'val': 0, 'operator_str': '>='},
+        {'col_name': 'index', 'val': 999, 'operator_str': '<='},
     ],
     'sort_keys': ['index'],
     'sort_asc': [True],
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
 }
-video_number = '10'
+video_number = '9'
 
 
 # Misc properties
@@ -124,16 +124,16 @@ video_configs = {
 # Video icon
 icon_configs = {
     'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-    'word': '电脑', # UPDATE ON NEW VIDEO
+    'word': '车站', # UPDATE ON NEW VIDEO
     'border_color_hex': "#1E90FF",
     'border_width': 30,
 }
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': 'HSK1级音频卡片, 第二部分',
-    'pinyin': 'HSK1 jí yīnpín kǎpiàn, dìèr bùfèn',
-    'english': 'HSK1 audio flashcards, part 2'
+    'chinese': 'HSK1级音频卡片',
+    'pinyin': 'HSK1 jí yīnpín kǎpiàn',
+    'english': 'HSK1 audio flashcards'
     }  # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
@@ -181,19 +181,19 @@ nonvocab_slides = {
         'change_index': -1,
         'pause_ms': 500,
 
-        'y_top': 20,
-        'y_bottom': 130,
-        'x_top': 20,
-        'spacing': 5,
-        'font_size': 24,
+        'y_top': 10,
+        'y_bottom': 100,
+        'x_top': 10,
+        'spacing': 2,
+        'font_size': 10,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 10,
-        'col_space_big': 20,
+        'col_space': 2,
+        'col_space_big': 4,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 70, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 140, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 170, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 30, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
         },
     },
 
@@ -205,28 +205,29 @@ nonvocab_slides = {
         'change_index': None,
         'pause_ms': 500,
 
-        'y_top': 20,
-        'y_bottom': 130,
-        'x_top': 20,
-        'spacing': 5,
-        'font_size': 24,
+
+        'y_top': 10,
+        'y_bottom': 100,
+        'x_top': 10,
+        'spacing': 2,
+        'font_size': 10,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 10,
-        'col_space_big': 20,
+        'col_space': 2,
+        'col_space_big': 4,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 70, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 140, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 170, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 30, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
         },
-    },
+    }
 }
 
 subtitle_text_configs = {
     'font_size': 22,
     'font_name': hanzi_font_path,
-    'y': 600,
-    'spacing': 20,
+    'y': 620,
+    'spacing': 10,
     'align': 'center',
     'fill': "#000000",
 }

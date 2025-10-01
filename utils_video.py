@@ -102,6 +102,22 @@ def create_icon_from_slide(icon_configs, video_configs, project_artifacts_folder
     return img
 
 
+def create_icon_from_slide_general_path(icon_configs, video_configs, path_to_bottom_image):
+    # Create solid color background
+    img = Image.new(
+        "RGB",
+        (video_configs['bg_size'][0] + icon_configs['border_width']*2, video_configs['bg_size'][1] + icon_configs['border_width']*2),
+        color=icon_configs['border_color_hex']
+    )
+
+    # Put the desired slide in the middle of the background
+    overlay_image = Image.open(path_to_bottom_image)
+    if overlay_image.mode != 'RGBA':
+        overlay_image = overlay_image.convert('RGBA')
+    img.paste(overlay_image, (icon_configs['border_width'], icon_configs['border_width']), overlay_image)
+    return img
+
+
 def draw_word_index(draw, video_configs, n_vocab, word_idx):
     word_index_font = ImageFont.truetype(video_configs['word_index']['font_name'], video_configs['word_index']['font_size'])
     word_index_part2_length = word_index_font.getlength(f"/{n_vocab}")
