@@ -305,6 +305,14 @@ def compute_text_dict_from_row(recording_id, row):
 
     else:
         raise ValueError(f'recording_id not found: {recording_id}')
+    
+    # Fill in video notes if present
+    if 'video_notes' in row.keys():
+        if isinstance(row['video_notes'], str):
+            texts_dict['video_notes'] = {
+                'text': row['video_notes'],
+                'save_clip': False,
+                }
     return texts_dict
 
 
@@ -332,6 +340,9 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             row, texts_dict['component_words']['font_size'])
 
     # Draw texts
+    # Reorder so video notes is first
+    if 'video_notes' in texts_dict.keys():
+        texts_dict = {k: texts_dict[k] for k in ['video_notes'] + [k2 for k2 in list(texts_dict.keys()) if k2 != 'video_notes']}
     for _, text_dict in texts_dict.items():
         img, draw, clips = draw_text_and_save_clip(
             img, draw, clips, text_dict, video_configs, current_image_file_path)

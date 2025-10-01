@@ -2,5 +2,4 @@
 __pycache__/
 output/
 __temp__*
-latest_data.csv
-edge-tts_*.csv
+static/

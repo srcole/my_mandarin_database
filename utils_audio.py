@@ -399,6 +399,9 @@ def load_audio(row, data_settings):
     else:
         raise ValueError(f"Invalid recording_id: {data_settings['recording_id']}")
     
+    if 'video_notes' in row.keys():
+        dict_audio_durations['video_notes'].append(row['video_notes'])
+    
     df_audio_durations = pd.DataFrame(dict_audio_durations)
     return combined, df_audio_durations
 
@@ -588,7 +591,7 @@ def create_dataframe_edge_tts_voices():
         dict_voice_list['personalities'].append(", ".join(voice["VoiceTag"]["VoicePersonalities"]))
     df_voice_list = pd.DataFrame(dict_voice_list)
     # print(len(df_voice_list))
-    # df_voice_list[df_voice_list['language']=='zh'].to_csv('edge-tts_zh_options.csv')
+    # df_voice_list[df_voice_list['language']=='zh'].to_csv('static/edge-tts_zh_options.csv')
     # df_voice_list.head()
     return df_voice_list
 
@@ -598,6 +601,26 @@ def generate_example_recordings_from_all_edge_tts_voices(
     tts_example_path = f"output/tts/compare/{example_sent}"
     if not os.path.exists(tts_example_path):
         os.mkdir(tts_example_path)
+
+    zh_favs = [
+        'Female_Deep, Confident, Casual_XiaoyuMultilingualNeural', # use this one
+        'Female_Friendly, Casual, Gentle_XiaobeiNeural',
+        'Female_Warm, Animated, Bright_XiaoxiaoDialectsNeural',
+        'Male_Casual, Confident, Warm_YunjieNeural',
+    ]
+    en_fem_favs = [
+        'Female_casual, youthful, approachable_NancyMultilingualNeural',
+        'Female_Cheerful, Warm, Gentle, Friendly_AdaMultilingualNeural',
+        'Female_Crisp, Bright, Clear_NatashaNeural.mp3',
+        'Female_Deep, Resonant_NovaTurboMultilingualNeural',
+        'Female_Empathetic, Formal, Sincere_CoraMultilingualNeural',
+        'Female_formal, confident, mature_SerenaMultilingualNeural',
+        'Female_nan_EmilyNeural',
+        'Female_nan_LunaNeural',
+        'Female_nan_MollyNeural',
+        'Female_nan_ShimmerTurboMultilingualNeural',
+        'Female_Pleasant, Friendly, Caring_AvaMultilingualNeural', # use this one for now
+    ]
 
     df_tts = pd.read_csv(f'edge-tts_{language}_options.csv', index_col=0)
     df_tts['personalities'] = df_tts['personalities'].fillna('NONE')

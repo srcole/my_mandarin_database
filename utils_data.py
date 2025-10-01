@@ -57,28 +57,48 @@ def _filter_by_recording_type(df, recording_id):
         raise ValueError(f"Invalid recording ID: {recording_id}")
     
 
-def filter_df_to_vocab_of_interest(df, rrow):
-    df_filt = df[
-            (df['priority'] <= rrow['max_priority']) &
-            (df['priority'] >= rrow['min_priority']) &
-            (df['known_english_prompt'] >= rrow['min_known_english_prompt']) &
-            (df['known_english_prompt'] <= rrow['max_known_english_prompt']) &
-            (df['known_pinyin_prompt'] >= rrow['min_known_pinyin_prompt']) &
-            (df['known_pinyin_prompt'] <= rrow['max_known_pinyin_prompt']) &
-            (df['quality'] <= rrow['min_combo_quality']) &
-            (df['adu'] >= rrow['min_adu']) &
-            (df['per'] >= rrow['min_per']) &
-            (df['date'] >= rrow['min_date']) &
-            (df['type'].isin(rrow['types_allowed'])) &
-            (df['chinese'].str.contains(rrow['contains_character']) if rrow['contains_character'] is not None else True) &
-            (df['category1'].isin(rrow['categories_allowed']) if rrow['categories_allowed'] is not None else True) &
-            (df['category2'].isin(rrow['categories2_allowed']) if rrow['categories2_allowed'] is not None else True) &
-            (df['cat1'].isin(rrow['cat1_values_allowed']) if rrow['cat1_values_allowed'] is not None else True) &
-            (~df['chinese'].isin(rrow['exclude_words']) if rrow['exclude_words'] is not None else True)
-        ]
-    df_filt = (_filter_by_recording_type(df_filt, rrow['recording_id'])
-        .sort_values(rrow['sort_keys'], ascending=rrow['sort_asc'],)
-        .reset_index(drop=True)).head(rrow['max_count'])
+def _filter_df(df, col_name, val, operator_str):
+    if operator_str == '>=':
+        return df[df[col_name] >= val]
+    elif operator_str == '<=':
+        return df[df[col_name] <= val]
+    else:
+        raise ValueError(f"Unknown operator_str: {operator_str}")
+
+
+def filter_df_to_vocab_of_interest(df, data_settings):
+    if data_settings['different_file_name'] is not None:
+        df_filt = pd.read_csv(data_settings['different_file_name'])
+        if data_settings['custom_filters'] is not None:
+            for custom_filters_dict in data_settings['custom_filters']:
+                df_filt = _filter_df(df_filt, **custom_filters_dict)
+
+    else:
+        df_filt = df[
+                (df['priority'] <= data_settings['max_priority']) &
+                (df['priority'] >= data_settings['min_priority']) &
+                (df['known_english_prompt'] >= data_settings['min_known_english_prompt']) &
+                (df['known_english_prompt'] <= data_settings['max_known_english_prompt']) &
+                (df['known_pinyin_prompt'] >= data_settings['min_known_pinyin_prompt']) &
+                (df['known_pinyin_prompt'] <= data_settings['max_known_pinyin_prompt']) &
+                (df['quality'] <= data_settings['min_combo_quality']) &
+                (df['adu'] >= data_settings['min_adu']) &
+                (df['per'] >= data_settings['min_per']) &
+                (df['date'] >= data_settings['min_date']) &
+                (df['type'].isin(data_settings['types_allowed'])) &
+                (df['chinese'].str.contains(data_settings['contains_character']) if data_settings['contains_character'] is not None else True) &
+                (df['category1'].isin(data_settings['categories_allowed']) if data_settings['categories_allowed'] is not None else True) &
+                (df['category2'].isin(data_settings['categories2_allowed']) if data_settings['categories2_allowed'] is not None else True) &
+                (df['cat1'].isin(data_settings['cat1_values_allowed']) if data_settings['cat1_values_allowed'] is not None else True) &
+                (~df['chinese'].isin(data_settings['exclude_words']) if data_settings['exclude_words'] is not None else True)
+            ]
+        df_filt = _filter_by_recording_type(df_filt, data_settings['recording_id'])
+                                            
+    df_filt = (df_filt
+        .sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
+        .reset_index(drop=True)
+        .head(data_settings['max_count'])
+        )
     return df_filt
 
 

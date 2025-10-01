@@ -25,4 +25,6 @@ default_settings = {
     'contains_character': None,
     'exclude_words': None,
     'max_count': 1000000,
+    'different_file_name': None,
+    'custom_filters': None,
 }
