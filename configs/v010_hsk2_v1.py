@@ -1,7 +1,7 @@
 from constants import ALL_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '736 HSK2 audio flash cards with example Chinese sentences in ?? minutes'
+video_name = '736 HSK2 audio flash cards with example Chinese sentences in 77 minutes'
 video_description = '''
 This video was made for quickly reviewing HSK2 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
 The English is spoken first, followed by the Chinese translation, and an example sentence in Chinese.
@@ -14,13 +14,13 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 data_settings = {
     'recording_id': 'ec_csent',
     'filename_suffix': 'hsk2_v1',
-    'different_file_name': 'static/hsk/HSK2_sent.csv',
+    'different_file_name': 'static/hsk/HSK2_sent_cat.csv',
     'custom_filters': [
         {'col_name': 'index', 'val': 0, 'operator_str': '>='},
         {'col_name': 'index', 'val': 999, 'operator_str': '<='},
     ],
-    'sort_keys': ['index'],
-    'sort_asc': [True],
+    'sort_keys': ['category', 'index'],
+    'sort_asc': [True, True],
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
 }
@@ -44,7 +44,7 @@ video_configs = {
     'bg_color': 'white',
     'text_color': 'black',
     'max_line_length_buffer_size': 60,
-    'decrease_font_step_size': 2,
+    'decrease_font_step_size': 1,
 
     'vocab_font_sizes': {
         'words': 50,
@@ -99,6 +99,7 @@ video_configs = {
             'y': 250,
             'font_size': 24,
             'fill': "#777777",
+            'spacing': 10,
             },
         'english': {
             'y': 60,
@@ -181,19 +182,19 @@ nonvocab_slides = {
         'change_index': -1,
         'pause_ms': 500,
 
-        'y_top': 10,
-        'y_bottom': 100,
-        'x_top': 10,
-        'spacing': 2,
+        'y_top': 4,
+        'y_bottom': 80,
+        'x_top': 4,
+        'spacing': 1,
         'font_size': 10,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 2,
-        'col_space_big': 4,
+        'col_space': 1,
+        'col_space_big': 2,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 30, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 23, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 32, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 39, 'font_path': hanzi_font_path},
         },
     },
 
@@ -205,28 +206,27 @@ nonvocab_slides = {
         'change_index': None,
         'pause_ms': 500,
 
-
         'y_top': 4,
-        'y_bottom': 60,
+        'y_bottom': 80,
         'x_top': 4,
         'spacing': 1,
-        'font_size': 8,
+        'font_size': 10,
         'fill': '#000000',
         'align': 'left',
         'col_space': 1,
         'col_space_big': 2,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 20, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 30, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 30, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 23, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 32, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 39, 'font_path': hanzi_font_path},
         },
     }
 }
 
 subtitle_text_configs = {
-    'font_size': 5,
+    'font_size': 20,
     'font_name': hanzi_font_path,
-    'y': 680,
+    'y': 640,
     'spacing': 5,
     'align': 'center',
     'fill': "#000000",

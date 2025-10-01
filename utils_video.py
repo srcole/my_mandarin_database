@@ -27,16 +27,63 @@ def determine_if_text_size_too_big(text: str, font: ImageFont.ImageFont, line_le
     return False
 
 
-def draw_text_and_save_clip(img, draw, clips, text_settings, video_configs, current_image_file_path):
+def break_text_into_lines(text: str, font: ImageFont.ImageFont, line_length: int, n_lines_max: int):
+    new_lines = ['']
+    for original_line in text.split('\n'):
+        # Make sure no words are longer than line_length in original line
+        # if so, divide it into multiple words to make a new line
+        words_split = original_line.split(' ')
+        no_long_words_line = ''
+        for word in words_split:
+            if font.getlength(word) > line_length:
+                print(font.getlength(word), word)
+                # Split the word into characters
+                long_word_chars = list(word)
+                new_long_word = ''
+                tmp_long_word = ''
+                for char in long_word_chars:
+                    test_word = f'{tmp_long_word}{char}'
+                    if font.getlength(test_word) <= line_length:
+                        tmp_long_word = f'{tmp_long_word}{char}'
+                    else:
+                        new_long_word += f'{tmp_long_word} '
+                        tmp_long_word = ''
+                no_long_words_line += f'{new_long_word}{tmp_long_word}'
+            else:
+                no_long_words_line += f'{word} '
+
+        words_split = no_long_words_line.split(' ')
+        for word_idx, word in enumerate(words_split):
+            test_line = f'{new_lines[-1]} {word}'.strip()
+            if word_idx == 0 and new_lines[-1] != '':
+                new_lines.append(word)
+            elif font.getlength(test_line) <= line_length:
+                new_lines[-1] = test_line
+            else:
+                new_lines.append(word)
+
+    # Limit number of lines to desired max
+    new_lines2 = []
+    for i_line in range(n_lines_max - 1):
+        new_lines2.append(new_lines[i_line])
+    new_lines2.append(''.join(new_lines[i_line+1:]))
+    return '\n'.join(new_lines2)
+
+
+def draw_text_and_save_clip(img, draw, clips, text_settings, video_configs, current_image_file_path, n_lines_max=1):
     # Determine if text size is too big, if so, reduce font size until it fits
     new_font_size = text_settings['font_size']
     font = ImageFont.truetype(text_settings['font_path'], new_font_size)
-    font_size_too_big = determine_if_text_size_too_big(text_settings['text'], font, line_length=video_configs['bg_size'][0]-video_configs['max_line_length_buffer_size'])
+    max_line_length = video_configs['bg_size'][0]-video_configs['max_line_length_buffer_size']
+    if n_lines_max > 1:
+        # Split if desired
+        text_settings['text'] = break_text_into_lines(text_settings['text'], font, max_line_length, n_lines_max)
+    font_size_too_big = determine_if_text_size_too_big(text_settings['text'], font, line_length=max_line_length)
     while font_size_too_big:
         new_font_size -= video_configs['decrease_font_step_size']
         print(f'reduced font size to {new_font_size}')
         font = ImageFont.truetype(text_settings['font_path'], new_font_size)
-        font_size_too_big = determine_if_text_size_too_big(text_settings['text'], font, line_length=video_configs['bg_size'][0]-video_configs['max_line_length_buffer_size'])
+        font_size_too_big = determine_if_text_size_too_big(text_settings['text'], font, line_length=max_line_length)
 
     # Get longest line length
     longest_length = max([font.getlength(x) for x in text_settings['text'].split('\n')])
@@ -356,12 +403,16 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             row, texts_dict['component_words']['font_size'])
 
     # Draw texts
-    # Reorder so video notes is first
+    # Reorder so video notes is first, and also allow it to be on 2 lines
     if 'video_notes' in texts_dict.keys():
         texts_dict = {k: texts_dict[k] for k in ['video_notes'] + [k2 for k2 in list(texts_dict.keys()) if k2 != 'video_notes']}
+        n_lines_max = 2
+    else:
+        n_lines_max = 1
+
     for _, text_dict in texts_dict.items():
         img, draw, clips = draw_text_and_save_clip(
-            img, draw, clips, text_dict, video_configs, current_image_file_path)
+            img, draw, clips, text_dict, video_configs, current_image_file_path, n_lines_max)
         
 
 def generate_intro_slide(video_configs, intro_configs, subtitle_text_configs, audio_filler_variables):

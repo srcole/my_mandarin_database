@@ -72,6 +72,9 @@ def filter_df_to_vocab_of_interest(df, data_settings):
         if data_settings['custom_filters'] is not None:
             for custom_filters_dict in data_settings['custom_filters']:
                 df_filt = _filter_df(df_filt, **custom_filters_dict)
+        cols_to_strip = ['chinese', 'pinyin', 'english', 'sentence', 'sentence_pinyin', 'sentence_english']
+        for col_name in cols_to_strip:
+            df_filt[col_name] = [x.strip() for x in df_filt[col_name]]
 
     else:
         df_filt = df[
