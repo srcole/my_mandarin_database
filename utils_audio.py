@@ -102,8 +102,7 @@ def load_audio(row, data_settings):
     pause_100ms = AudioSegment.silent(duration=100)
     pause_300ms = AudioSegment.silent(duration=300)
     pause_500ms = AudioSegment.silent(duration=500)
-    pause_750ms = AudioSegment.silent(duration=750)
-    pause_1000ms = AudioSegment.silent(duration=1000)
+    pause_between_words = AudioSegment.silent(duration=data_settings['pause_between_words_ms'])
 
     dict_audio_durations = defaultdict(list)
     chinese_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['chinese'].replace('/', '-')}.mp3")
@@ -112,7 +111,7 @@ def load_audio(row, data_settings):
     if data_settings['recording_id'] in ['001', '007', '009', 'ce_wordsent']:
         sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         sent_english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['sentence_english']}.mp3")
-        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_500ms + sent_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_500ms + sent_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -132,15 +131,15 @@ def load_audio(row, data_settings):
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['rel_start_sent_english'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 0.5)
 
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent_english'][-1] + dict_audio_durations['d_sent_english'][-1] + dict_audio_durations['d_sent'][-1] + 1.5)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent_english'][-1] + dict_audio_durations['d_sent_english'][-1] + dict_audio_durations['d_sent'][-1] + 0.5 + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] in ['002', '011']:
         sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
-        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_audio + pause_between_words
 
     elif data_settings['recording_id'] in ['004', '008', '010', '014']:
-        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -151,11 +150,11 @@ def load_audio(row, data_settings):
 
         dict_audio_durations['rel_start_chinese'].append(0)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 1)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] in ['016']:
-        combined = english_audio + pause_500ms + chinese_audio + pause_300ms + chinese_audio + pause_1000ms
+        combined = english_audio + pause_500ms + chinese_audio + pause_300ms + chinese_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -166,7 +165,7 @@ def load_audio(row, data_settings):
 
         dict_audio_durations['rel_start_english'].append(0)
         dict_audio_durations['rel_start_chinese'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + .5)
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1.3)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 0.3 + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] == '005':
@@ -175,7 +174,7 @@ def load_audio(row, data_settings):
             tones_audio += load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{pinyin_tone}.mp3")
             tones_audio += pause_100ms
 
-        combined = chinese_audio + pause_500ms + tones_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + tones_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_between_words
 
     elif data_settings['recording_id'] == '006':
         word1_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['word1']}.mp3")
@@ -194,7 +193,7 @@ def load_audio(row, data_settings):
             component_words_audio += pause_500ms + word3_audio + pause_100ms + word3e_audio
         if not pd.isna(row['word4']):
             component_words_audio += pause_500ms + word4_audio + pause_100ms + word4e_audio
-        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms
+        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -216,7 +215,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['rel_start_component_words'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_component_words'][-1] + dict_audio_durations['d_component_words'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
 
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] in ['ceword_components_cesent']:
@@ -238,7 +237,7 @@ def load_audio(row, data_settings):
             component_words_audio += pause_500ms + word3_audio + pause_100ms + word3e_audio
         if not pd.isna(row['word4']):
             component_words_audio += pause_500ms + word4_audio + pause_100ms + word4e_audio
-        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_500ms + sent_english_audio + pause_between_words
 
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -268,7 +267,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['rel_start_sent_english'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 0.5)
 
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent_english'][-1] + dict_audio_durations['d_sent_english'][-1] + 1)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent_english'][-1] + dict_audio_durations['d_sent_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] in ['ceword_components_csent']:
@@ -289,7 +288,7 @@ def load_audio(row, data_settings):
             component_words_audio += pause_500ms + word3_audio + pause_100ms + word3e_audio
         if not pd.isna(row['word4']):
             component_words_audio += pause_500ms + word4_audio + pause_100ms + word4e_audio
-        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + component_words_audio + pause_500ms + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_between_words
 
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -322,7 +321,7 @@ def load_audio(row, data_settings):
 
     elif data_settings['recording_id'] in ['012', 'ec_csent']:
         sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
-        combined = english_audio + pause_500ms + chinese_audio + pause_500ms + sent_audio + pause_1000ms
+        combined = english_audio + pause_500ms + chinese_audio + pause_500ms + sent_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -338,12 +337,12 @@ def load_audio(row, data_settings):
         dict_audio_durations['rel_start_english'].append(0)
         dict_audio_durations['rel_start_chinese'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] in ['ec_csent']:
         sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
-        combined = chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_1000ms
+        combined = chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -359,12 +358,12 @@ def load_audio(row, data_settings):
         dict_audio_durations['rel_start_chinese'].append(0)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] in ['015', 'cn_only_sent']:
         sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
-        combined = chinese_audio + pause_300ms + sent_audio + pause_1000ms
+        combined = chinese_audio + pause_300ms + sent_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -378,12 +377,12 @@ def load_audio(row, data_settings):
 
         dict_audio_durations['rel_start_chinese'].append(0)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.3)
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 1)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] == 'chinese_only_word_twice':
         sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
-        combined = chinese_audio + pause_300ms + chinese_audio + pause_750ms
+        combined = chinese_audio + pause_300ms + chinese_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
@@ -392,7 +391,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + chinese_audio.duration_seconds + 0.3)
 
         dict_audio_durations['rel_start_chinese'].append(0)
-        dict_audio_durations['sum_theory'].append(dict_audio_durations['d_chinese'][-1] + 1)
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['d_chinese'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     else:

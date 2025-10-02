@@ -65,7 +65,8 @@ def break_text_into_lines(text: str, font: ImageFont.ImageFont, line_length: int
     # Limit number of lines to desired max
     new_lines2 = []
     for i_line in range(n_lines_max - 1):
-        new_lines2.append(new_lines[i_line])
+        if len(new_lines) > i_line:
+            new_lines2.append(new_lines[i_line])
     new_lines2.append(''.join(new_lines[i_line+1:]))
     return '\n'.join(new_lines2)
 
@@ -80,8 +81,12 @@ def draw_text_and_save_clip(img, draw, clips, text_settings, video_configs, curr
         text_settings['text'] = break_text_into_lines(text_settings['text'], font, max_line_length, n_lines_max)
     font_size_too_big = determine_if_text_size_too_big(text_settings['text'], font, line_length=max_line_length)
     while font_size_too_big:
-        new_font_size -= video_configs['decrease_font_step_size']
-        print(f'reduced font size to {new_font_size}')
+        if new_font_size <= 5:
+            text_settings['text'] = text_settings['text'][:-1]
+            print(f'reduced text to {text_settings['text']}')
+        else:
+            new_font_size -= video_configs['decrease_font_step_size']
+            print(f'reduced font size to {new_font_size}')
         font = ImageFont.truetype(text_settings['font_path'], new_font_size)
         font_size_too_big = determine_if_text_size_too_big(text_settings['text'], font, line_length=max_line_length)
 
@@ -406,7 +411,7 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
     # Reorder so video notes is first, and also allow it to be on 2 lines
     if 'video_notes' in texts_dict.keys():
         texts_dict = {k: texts_dict[k] for k in ['video_notes'] + [k2 for k2 in list(texts_dict.keys()) if k2 != 'video_notes']}
-        n_lines_max = 2
+        n_lines_max = video_configs['vocab_slide']['video_notes']['n_lines_max']
     else:
         n_lines_max = 1
 
@@ -491,8 +496,12 @@ def generate_word_list_slide(video_configs, word_list_configs, subtitle_text_con
             font = ImageFont.truetype(dp_settings['font_path'], new_font_size)
             font_size_too_big = determine_if_text_size_too_big(row[def_part], font, line_length=dp_settings['x_max'])
             while font_size_too_big:
-                new_font_size -= 2
-                print(f'"{row[def_part]}" reduced font size to {new_font_size}')
+                if new_font_size <= 5:
+                    row[def_part] = row[def_part][:-1]
+                    print(f'reduced text to {row[def_part]}')
+                else:
+                    new_font_size -= video_configs['decrease_font_step_size']
+                    print(f'reduced font size to {new_font_size}')
                 font = ImageFont.truetype(dp_settings['font_path'], new_font_size)
                 font_size_too_big = determine_if_text_size_too_big(row[def_part], font, line_length=dp_settings['x_max'])
             

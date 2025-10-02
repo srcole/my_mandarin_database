@@ -3,3 +3,4 @@ __pycache__/
 output/
 __temp__*
 static/
+videoTEMP_*
