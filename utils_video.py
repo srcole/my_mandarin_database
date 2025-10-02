@@ -557,8 +557,12 @@ def generate_outro_slide(video_configs, outro_configs, subtitle_text_configs, df
             font = ImageFont.truetype(dp_settings['font_path'], new_font_size)
             font_size_too_big = determine_if_text_size_too_big(row[def_part], font, line_length=dp_settings['x_max'])
             while font_size_too_big:
-                new_font_size -= 2
-                print(f'"{row[def_part]}" reduced font size to {new_font_size}')
+                if new_font_size <= 5:
+                    row[def_part] = row[def_part][:-1]
+                    print(f'reduced text to {row[def_part]}')
+                else:
+                    new_font_size -= video_configs['decrease_font_step_size']
+                    print(f'reduced font size to {new_font_size}')
                 font = ImageFont.truetype(dp_settings['font_path'], new_font_size)
                 font_size_too_big = determine_if_text_size_too_big(row[def_part], font, line_length=dp_settings['x_max'])
             
