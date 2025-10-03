@@ -1,7 +1,7 @@
 from constants import ALL_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = 'xxx HSK5 audio flash cards with example Chinese sentences in less than 2 hours'
+video_name = '1134 HSK6 audio flash cards with example Chinese sentences in less than 2 hours'
 video_description = '''
 This video was made for quickly reviewing HSK6 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
 The English is spoken first, followed by the Chinese translation, and an example sentence in Chinese.
@@ -15,9 +15,9 @@ video_number = '14'
 data_settings = {
     'recording_id': 'ec_csent',
     'filename_suffix': 'hsk6_v1',
-    'different_file_name': 'static/hsk/intermediate/HSK5_present.csv',
+    # 'different_file_name': 'static/hsk/intermediate/HSK6_present.csv',
     # 'different_file_name': 'static/hsk/intermediate/HSK6_sent_nocat.csv',
-    # 'different_file_name': 'static/hsk/HSK6_sent_cat.csv',
+    'different_file_name': 'static/hsk/HSK6_sent_cat.csv',
     'custom_filters': [
         {'col_name': 'index', 'val': 0, 'operator_str': '>='},
         {'col_name': 'index', 'val': 9999, 'operator_str': '<='},
@@ -197,8 +197,8 @@ nonvocab_slides = {
         'col_space_big': 1,
         'definition_configs':{
             'chinese': {'x_offset': 0, 'x_max': 20, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 29, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 30, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 26, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 28, 'font_path': hanzi_font_path},
         },
     },
 
@@ -221,8 +221,8 @@ nonvocab_slides = {
         'col_space_big': 1,
         'definition_configs':{
             'chinese': {'x_offset': 0, 'x_max': 20, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 29, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 30, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 26, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 28, 'font_path': hanzi_font_path},
         },
     }
 }
