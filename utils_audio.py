@@ -381,7 +381,6 @@ def load_audio(row, data_settings):
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     elif data_settings['recording_id'] == 'chinese_only_word_twice':
-        sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         combined = chinese_audio + pause_300ms + chinese_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
@@ -392,6 +391,21 @@ def load_audio(row, data_settings):
 
         dict_audio_durations['rel_start_chinese'].append(0)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['d_chinese'][-1] + data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['combined'].append(combined.duration_seconds)
+
+    elif data_settings['recording_id'] == 'cec':
+        combined = chinese_audio + pause_500ms + english_audio + pause_500ms + chinese_audio + pause_between_words
+
+        dict_audio_durations['chinese'].append(row['chinese'])
+        dict_audio_durations['pinyin'].append(row['pinyin'])
+        dict_audio_durations['english'].append(row['english'])
+
+        dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + 0.5)
+        dict_audio_durations['d_english'].append(english_audio.duration_seconds + chinese_audio.duration_seconds + 0.5)
+
+        dict_audio_durations['rel_start_chinese'].append(0)
+        dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1])
+        dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
     else:
@@ -408,7 +422,7 @@ def compute_start_times_for_clips(df_durations, recording_settings):
     # Compute columns for video timestamps
     df_durations['end'] = df_durations['combined'].cumsum()
     df_durations['start'] = df_durations['end'] - df_durations['combined']
-    if recording_settings['recording_id'] in ['004', '008', '010', '014', '016']:
+    if recording_settings['recording_id'] in ['004', '008', '010', '014', '016', 'cec']:
         df_durations['start_chinese'] = df_durations['start'] + df_durations['rel_start_chinese']
         df_durations['start_english'] = df_durations['start'] + df_durations['rel_start_english']
     elif recording_settings['recording_id'] in ['ceword_components_cesent']:
@@ -510,7 +524,7 @@ def generate_nonvocab_audio_and_compute_durations(data_settings, df_vocab_audio_
     # Compute timestamps for starting each clip
     df_vocab_audio_durations['end'] = df_vocab_audio_durations['combined'].cumsum()
     df_vocab_audio_durations['start'] = df_vocab_audio_durations['end'] - df_vocab_audio_durations['combined']
-    if data_settings['recording_id'] in ['004', '008', '010', '014', '016']:
+    if data_settings['recording_id'] in ['004', '008', '010', '014', '016', 'cec']:
         df_vocab_audio_durations['start_chinese'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_chinese']
         df_vocab_audio_durations['start_english'] = df_vocab_audio_durations['start'] + df_vocab_audio_durations['rel_start_english']
     elif data_settings['recording_id'] in ['ceword_components_cesent']:

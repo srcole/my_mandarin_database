@@ -41,7 +41,7 @@ def check_dups(df):
 
 def _filter_by_recording_type(df, recording_id):
     """Filter the DataFrame based on the recording type."""
-    if recording_id in ['004', '005', '010', '014', '016', 'chinese_only_word_twice']:
+    if recording_id in ['004', '005', '010', '014', '016', 'chinese_only_word_twice', 'cec']:
         return df.dropna(subset=['chinese', 'pinyin', 'english'])
     elif recording_id in ['001', '009', '002', '012', '015', 'cn_only_sent', 'ce_wordsent', 'ec_csent']:
         return df.dropna(subset=['sentence', 'sentence_english'])

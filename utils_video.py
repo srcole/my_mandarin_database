@@ -228,6 +228,7 @@ def draw_previous_word(draw, video_configs, previous_word):
             text=previous_word,
             font=ImageFont.truetype(video_configs['previous_word']['font_name'], video_configs['previous_word']['font_size']),
             fill=video_configs['previous_word']['color'],
+            spacing=video_configs['previous_word']['spacing'],
             align='left'
             )
 
@@ -346,6 +347,23 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
+    elif recording_id == 'cec':
+        texts_dict = {
+        'chinese': {
+            'text': f"{row['chinese']}",
+            'save_clip': False,
+            },
+        'pinyin': {
+            'text': f"{row['pinyin']}",
+            'save_clip': False,
+            },
+        'english': {'text': row['english'],
+            'save_clip': True,
+            'duration': row['end'] - row['start'],
+            'timestamp_start': row['start'],
+            },
+    }
+
     elif recording_id == 'ec_csent':
         texts_dict = {
         'english': {'text': row['english'],
@@ -413,7 +431,10 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
         texts_dict = {k: texts_dict[k] for k in ['video_notes'] + [k2 for k2 in list(texts_dict.keys()) if k2 != 'video_notes']}
         n_lines_max = video_configs['vocab_slide']['video_notes']['n_lines_max']
     else:
-        n_lines_max = 1
+        if recording_id in ['cec']:
+            n_lines_max = 2
+        else:
+            n_lines_max = 1
 
     for _, text_dict in texts_dict.items():
         img, draw, clips = draw_text_and_save_clip(
@@ -476,8 +497,11 @@ def generate_intro_slide(video_configs, intro_configs, subtitle_text_configs, au
 
 def generate_word_list_slide(video_configs, word_list_configs, subtitle_text_configs, df_audio_durations_words_only):
     # Derive more configs
-    word_list_configs['definition_configs']['pinyin']['x_offset'] = word_list_configs['definition_configs']['chinese']['x_offset'] + word_list_configs['definition_configs']['chinese']['x_max'] + word_list_configs['col_space']
-    word_list_configs['definition_configs']['english']['x_offset'] = word_list_configs['definition_configs']['pinyin']['x_offset'] + word_list_configs['definition_configs']['pinyin']['x_max'] + word_list_configs['col_space']
+    if 'pinyin' in word_list_configs['definition_configs']:
+        word_list_configs['definition_configs']['pinyin']['x_offset'] = word_list_configs['definition_configs']['chinese']['x_offset'] + word_list_configs['definition_configs']['chinese']['x_max'] + word_list_configs['col_space']
+        word_list_configs['definition_configs']['english']['x_offset'] = word_list_configs['definition_configs']['pinyin']['x_offset'] + word_list_configs['definition_configs']['pinyin']['x_max'] + word_list_configs['col_space']
+    else:
+        word_list_configs['definition_configs']['english']['x_offset'] = word_list_configs['definition_configs']['chinese']['x_offset'] + word_list_configs['definition_configs']['chinese']['x_max'] + word_list_configs['col_space']
     word_list_configs['xchange'] = word_list_configs['definition_configs']['english']['x_offset'] + word_list_configs['definition_configs']['english']['x_max'] + word_list_configs['col_space_big']
     word_list_configs['ychange'] = word_list_configs['font_size'] + word_list_configs['spacing']
 
@@ -537,8 +561,12 @@ def generate_word_list_slide(video_configs, word_list_configs, subtitle_text_con
 
 def generate_outro_slide(video_configs, outro_configs, subtitle_text_configs, df_audio_durations_words_only):
     # Derive more configs
-    outro_configs['definition_configs']['pinyin']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
-    outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['pinyin']['x_offset'] + outro_configs['definition_configs']['pinyin']['x_max'] + outro_configs['col_space']
+    # Derive more configs
+    if 'pinyin' in outro_configs['definition_configs']:
+        outro_configs['definition_configs']['pinyin']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
+        outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['pinyin']['x_offset'] + outro_configs['definition_configs']['pinyin']['x_max'] + outro_configs['col_space']
+    else:
+        outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
     outro_configs['xchange'] = outro_configs['definition_configs']['english']['x_offset'] + outro_configs['definition_configs']['english']['x_max'] + outro_configs['col_space_big']
     outro_configs['ychange'] = outro_configs['font_size'] + outro_configs['spacing']
 
