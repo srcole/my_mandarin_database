@@ -389,6 +389,33 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
+    elif recording_id == 'cce_cecsent':
+        texts_dict = {
+        'chinese': {
+            'text': f"{row['chinese']} ({row['pinyin']})",
+            'save_clip': True,
+            'duration': row['start_english'] - row['start'],
+            'timestamp_start': row['start'],
+            },
+        'english': {'text': row['english'],
+            'save_clip': True,
+            'duration': row['start_sent'] - row['start_english'],
+            'timestamp_start': row['start_english'],
+            },
+        'sentence_chinese': {'text': row['sentence'],
+            'save_clip': False},
+        'sentence_pinyin': {'text': row['sentence_pinyin'],
+            'save_clip': True,
+            'duration': row['start_sent_english'] - row['start_sent'],
+            'timestamp_start': row['start_sent'],
+            },
+        'sentence_english': {'text': row['sentence_english'],
+            'save_clip': True,
+            'duration': row['end'] - row['start_sent_english'],
+            'timestamp_start': row['start_sent_english'],
+            },
+    }
+
     else:
         raise ValueError(f'recording_id not found: {recording_id}')
     
@@ -412,7 +439,7 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
                 texts_dict[text_id][config_key] = config_value
 
     # Draw line between word and sentence
-    if recording_id in ['ec_csent', 'ceword_components_cesent', 'ceword_components_csent']:
+    if 'sentence_line' in video_configs.keys():
         draw.line([
             (video_configs['sentence_line']['x'], video_configs['sentence_line']['y']),
             (video_configs['bg_size'][0] - video_configs['sentence_line']['x'], video_configs['sentence_line']['y'])],
@@ -426,9 +453,15 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             row, texts_dict['component_words']['font_size'])
 
     # Draw texts
-    # Reorder so video notes is first, and also allow it to be on 2 lines
+    # Reorder so video notes is at the desired position, and also allow it to be on multiple lines if specified
     if 'video_notes' in texts_dict.keys():
-        texts_dict = {k: texts_dict[k] for k in ['video_notes'] + [k2 for k2 in list(texts_dict.keys()) if k2 != 'video_notes']}
+        keys_not_video_notes = [kvn for kvn in texts_dict.keys() if kvn != 'video_notes']
+        texts_dict = {
+            kvn: texts_dict[kvn] for kvn in 
+            keys_not_video_notes[:video_configs['vocab_slide']['video_notes']['video_notes_slide_index']] + 
+            ['video_notes'] + 
+            keys_not_video_notes[video_configs['vocab_slide']['video_notes']['video_notes_slide_index']:]
+            }
         n_lines_max = video_configs['vocab_slide']['video_notes']['n_lines_max']
     else:
         if recording_id in ['cec']:
