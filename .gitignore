@@ -4,3 +4,4 @@ output/
 __temp__*
 static/
 videoTEMP_*
+*_parallel.ipynb

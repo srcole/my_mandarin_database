@@ -47,7 +47,7 @@ def _filter_by_recording_type(df, recording_id):
         return df.dropna(subset=['sentence', 'sentence_english'])
     elif recording_id == '006':
         return df.dropna(subset=['word1', 'word1_english', 'word2', 'word2_english'])
-    elif recording_id in ['ceword_components_cesent', 'ceword_components_csent']:
+    elif recording_id in ['ceword_components_cesent', 'ceword_components_csent', 'ec_csent_scombo']:
         return df.dropna(subset=['word1', 'word1_english', 'word2', 'word2_english', 'sentence'])
     elif recording_id == '007':
         return df[df['date'] >= '2025-07-15'].dropna(subset=['sentence', 'sentence_english'])

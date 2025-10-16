@@ -1,7 +1,7 @@
 from constants import ALL_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = 'HSK5 audio flash cards with 1067 dual-language example sentences'
+video_name = 'HSK5 audio flash cards with 1067 dual-language example sentences in 4 hours'
 video_description = '''
 This video was made for quickly reviewing HSK5 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
 The Chinese is spoken first, followed by the English translation, and an example sentence in both Chinese and English.

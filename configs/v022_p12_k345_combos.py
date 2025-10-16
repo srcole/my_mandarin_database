@@ -1,30 +1,28 @@
-from constants import ALL_TYPES
+from constants import WORD_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '497 HSK1 audio flash cards with example Chinese sentences in 50 minutes'
+video_name = 'TODO'
 video_description = '''
-This video was made for quickly reviewing HSK1 Chinese vocabulary (HSK3.0), practicing both listening comprehension and character recognition.
-The English is spoken first, followed by the Chinese translation, and an example sentence in Chinese.
+TODO
 Because these videos are programmatically generated, the format is customizable to quickly produce alternate formats with different vocabulary categories, so please let me know if you have any corrections, suggestions, feedback, or questions, please leave a comment.
 
 Python code to produce this video: https://github.com/srcole/my_mandarin_database
 '''
 
 # Main settings  # UPDATE ON NEW VIDEO
+video_number = '22'
 data_settings = {
-    'recording_id': 'ec_csent',
-    'filename_suffix': 'hsk1_v1',
-    'different_file_name': 'static/hsk/HSK1_sent.csv',
-    'custom_filters': [
-        {'col_name': 'index', 'val': 0, 'operator_str': '>='},
-        {'col_name': 'index', 'val': 999, 'operator_str': '<='},
-    ],
-    'sort_keys': ['index'],
-    'sort_asc': [True],
+    'recording_id': 'ec_csent_scombo',
+    'filename_suffix': 'p12_k345_combos',
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
+    'pause_between_words_ms': 1000,
+    'min_priority': 1, 'max_priority': 2,
+    'min_known_english_prompt': 3, 'max_known_english_prompt': 5,
+    'min_combo_quality': 4,
+    'max_count': 600,
+    'types_allowed': WORD_TYPES,
 }
-video_number = '9'
 
 
 # Misc properties
@@ -44,7 +42,7 @@ video_configs = {
     'bg_color': 'white',
     'text_color': 'black',
     'max_line_length_buffer_size': 60,
-    'decrease_font_step_size': 2,
+    'decrease_font_step_size': 1,
 
     'vocab_font_sizes': {
         'words': 50,
@@ -71,6 +69,7 @@ video_configs = {
     'previous_word': {
         'font_name': hanzi_font_path,
         'font_size': 18,
+        'spacing': 6,
         'x': 40,
         'y': 75,
         'color': "#777777",
@@ -78,6 +77,7 @@ video_configs = {
     'previous_sent': {
         'font_name': hanzi_font_path,
         'font_size': 18,
+        'spacing': 6,
         'y': 75,
         'color': "#777777",
     },
@@ -88,23 +88,23 @@ video_configs = {
         'width': 4,
     },
     'sentence_line': {
-        'y': 330,
+        'y': 340,
         'x': 30,
         'color': "#000000",
         'width': 5,
     },
 
     'vocab_slide': {
-        'video_notes': {
-            'y': 250,
-            'font_size': 24,
-            'fill': "#777777",
-            },
-        'english': {
+        'chinese': {
             'y': 60,
             },
-        'chinese': {
-            'y': 160,
+        'english': {
+            'y': 140,
+            },
+        'component_words': {
+            'y': 210,
+            'font_size': 38,
+            'spacing': 8,
             },
         'sentence_chinese': {
             'y': 380,
@@ -115,7 +115,7 @@ video_configs = {
             'font_size': 35,
             },
         'sentence_english': {
-            'y': 510,
+            'y': 530,
             'font_size': 35,
             },
     },
@@ -123,17 +123,17 @@ video_configs = {
 
 # Video icon
 icon_configs = {
-    'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-    'word': '车站', # UPDATE ON NEW VIDEO
+    'file_suffix': '_sentence', # UPDATE ON NEW VIDEO
+    'word': '保险', # UPDATE ON NEW VIDEO
     'border_color_hex': "#1E90FF",
     'border_width': 30,
 }
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': 'HSK1级音频卡片',
-    'pinyin': 'HSK1 jí yīnpín kǎpiàn',
-    'english': 'HSK1 audio flashcards'
+    'chinese': '我的高优先级未知单词',
+    'pinyin': 'Wǒ de gāo yōuxiān jí wèizhī dāncí',
+    'english': 'My high-priorty unknown words'
     }  # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
@@ -147,7 +147,7 @@ nonvocab_slides = {
         'channel_title': ('My Mandarin Database', '我的普通话数据库'),
         'video_number': (f'Video #{video_number}', f'视频#{video_number}'),
         'video_name': (subtitle['english'], subtitle['chinese']),
-        'video_structure': ('English first, Chinese second\nExample Chinese sentences', '先英文，后中文\n并附中文例句'),
+        'video_structure': ('Chinese first, English second\nExample sentences in both languages', '先中文，后英文\n两种语言的例句'),
         'count_str': ("{n_vocab_words} words", "{n_vocab_words}个词汇"),
         'duration_str': ('{audio_duration_minutes:.0f} minutes', '{audio_duration_minutes:.0f}分钟'),
         'feedback': ('If you have any questions, suggestions, or feedback\nplease leave a comment', '如果你有任何问题、建议或反馈\n请留言'),
@@ -185,15 +185,15 @@ nonvocab_slides = {
         'y_bottom': 100,
         'x_top': 10,
         'spacing': 2,
-        'font_size': 10,
+        'font_size': 12,
         'fill': '#000000',
         'align': 'left',
         'col_space': 2,
         'col_space_big': 4,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 30, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 50, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 70, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 90, 'font_path': hanzi_font_path},
         },
     },
 
@@ -209,42 +209,24 @@ nonvocab_slides = {
         'y_bottom': 100,
         'x_top': 10,
         'spacing': 2,
-        'font_size': 10,
+        'font_size': 12,
         'fill': '#000000',
         'align': 'left',
         'col_space': 2,
         'col_space_big': 4,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 30, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 44, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 50, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 70, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 90, 'font_path': hanzi_font_path},
         },
     }
 }
 
 subtitle_text_configs = {
-    'font_size': 22,
+    'font_size': 20,
     'font_name': hanzi_font_path,
-    'y': 620,
-    'spacing': 10,
+    'y': 640,
+    'spacing': 5,
     'align': 'center',
     'fill': "#000000",
 }
-
-
-# Old code:
-
-# # read hsk file quick
-# df = pd.read_csv('static/16personalities_translate.csv', delimiter=';;')
-# df
-
-# # read hsk file quick
-# df = pd.read_csv('static/HSK 1.tsv', delimiter='\t', header=None).rename(columns={0:'trad', 1: 'chinese', 2: 'pinyin', 3: 'english'})
-# df.head()
-
-# dfsent = pd.read_csv('static/hsk/HSK1_sent.csv', index_col=0)
-# dfsent = dfsent.merge(df[['chinese', 'trad', 'pinyin', 'english']].rename(columns={'pinyin': 'hsk3.0_pinyin', 'english': 'hsk3.0_def'}), on='chinese')
-# dfsent = dfsent.drop(['Unnamed: 0'], axis=1)
-# dfsent.to_csv('static/hsk/HSK1_sent.csv')
-# dfsent.head()
-# dfsent
