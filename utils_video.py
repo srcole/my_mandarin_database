@@ -47,7 +47,7 @@ def break_text_into_lines(text: str, font: ImageFont.ImageFont, line_length: int
                         tmp_long_word = f'{tmp_long_word}{char}'
                     else:
                         new_long_word += f'{tmp_long_word} '
-                        tmp_long_word = ''
+                        tmp_long_word = char
                 no_long_words_line += f'{new_long_word}{tmp_long_word}'
             else:
                 no_long_words_line += f'{word} '
@@ -110,12 +110,13 @@ def draw_text_and_save_clip(img, draw, clips, text_settings, video_configs, curr
 def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_artifacts_folder):
     # Add duration and start time to each clip
     clips_all = clips.copy()
-    for cs_name, cs_set in nonvocab_slides.items():
-        image_with_duration = ImageClip(f'{project_artifacts_folder}/{cs_name}.png', duration=cs_set['duration']).with_start(cs_set['start'])
-        if cs_set['clip_index'] >= 0:
-            clips_all.insert(cs_set['clip_index'], image_with_duration)
-        else:
-            clips_all.append(image_with_duration)
+    if nonvocab_slides is not None:
+        for cs_name, cs_set in nonvocab_slides.items():
+            image_with_duration = ImageClip(f'{project_artifacts_folder}/{cs_name}.png', duration=cs_set['duration']).with_start(cs_set['start'])
+            if cs_set['clip_index'] >= 0:
+                clips_all.insert(cs_set['clip_index'], image_with_duration)
+            else:
+                clips_all.append(image_with_duration)
     print(f"Number of clips: {len(clips_all)}")
 
     # Compare durations of audio and video
@@ -362,7 +363,7 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
-    elif recording_id == 'cword2x':
+    elif recording_id in ['cword2x', 'conly']:
         texts_dict = {
         'english': {'text': row['english'],
             'save_clip': False,
@@ -492,7 +493,9 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             }
         n_lines_max = video_configs['vocab_slide']['video_notes']['n_lines_max']
     else:
-        if recording_id in ['cec']:
+        if 'global_n_lines_max' in video_configs.keys():
+            n_lines_max = video_configs['global_n_lines_max']
+        elif recording_id in ['cec']:
             n_lines_max = 2
         else:
             n_lines_max = 1
