@@ -321,19 +321,19 @@ def compute_text_dict_from_row(recording_id, row):
 
     elif recording_id == 'ec_csent_scombo':
         texts_dict = {
-        'chinese': {
-            'text': f"{row['chinese']} ({row['pinyin']})",
+        'english': {'text': row['english'],
             'save_clip': True,
-            'duration': row['start_english'] - row['start'],
+            'duration': row['start_chinese'] - row['start'],
             'timestamp_start': row['start'],
             },
         'component_words': {'text': create_component_words_text(row),
             'save_clip': False,
             },
-        'english': {'text': row['english'],
+        'chinese': {
+            'text': f"{row['chinese']} ({row['pinyin']})",
             'save_clip': True,
-            'duration': row['start_sent'] - row['start_english'],
-            'timestamp_start': row['start_english'],
+            'duration': row['start_sent'] - row['start_chinese'],
+            'timestamp_start': row['start_chinese'],
             },
         'sentence_chinese': {'text': row['sentence'],
             'save_clip': False},

@@ -123,8 +123,8 @@ video_configs = {
 
 # Video icon
 icon_configs = {
-    'file_suffix': '_sentence', # UPDATE ON NEW VIDEO
-    'word': '保险', # UPDATE ON NEW VIDEO
+    'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
+    'word': '弱点', # UPDATE ON NEW VIDEO
     'border_color_hex': "#1E90FF",
     'border_width': 30,
 }

@@ -5,3 +5,4 @@ __temp__*
 static/
 videoTEMP_*
 *_parallel.ipynb
+configs/vp*
