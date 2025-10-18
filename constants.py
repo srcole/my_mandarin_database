@@ -27,4 +27,6 @@ default_settings = {
     'max_count': 1000000,
     'different_file_name': None,
     'custom_filters': None,
+    'pause_between_words_ms': 1000,
+    'pause_start_ms': 0,
 }
