@@ -77,6 +77,9 @@ def filter_df_to_vocab_of_interest(df, data_settings):
             if col_name in df_filt.columns:
                 df_filt[col_name] = [x.strip() for x in df_filt[col_name]]
 
+        if data_settings['recording_id'] in ['cconvo']:
+            df_filt['video_notes'] = [f'Speaker {s}' for s in df_filt['speaker']]
+
     else:
         df_filt = df[
                 (df['priority'] <= data_settings['max_priority']) &
@@ -97,9 +100,10 @@ def filter_df_to_vocab_of_interest(df, data_settings):
                 (~df['chinese'].isin(data_settings['exclude_words']) if data_settings['exclude_words'] is not None else True)
             ]
         df_filt = _filter_by_recording_type(df_filt, data_settings['recording_id'])
-                                            
+   
+    if data_settings['sort_keys'] is not None and data_settings['sort_asc'] is not None:
+        df_filt = df_filt.sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
     df_filt = (df_filt
-        .sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
         .reset_index(drop=True)
         .head(data_settings['max_count'])
         )

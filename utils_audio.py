@@ -54,8 +54,12 @@ def create_tts_file(content_str, lang_name, last_timestamp, chinese_char, record
 
 
 def create_tts_files_for_one_vocab_word(row, data_settings):
-    create_tts_file(content_str=row['chinese'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
-    if data_settings['recording_id'] not in ['conly']:
+    if data_settings['recording_id'] == 'cconvo':
+        voice_name = data_settings['voice_name_convo'][row['speaker']]
+    else:
+        voice_name = data_settings['voice_name_zh']
+    create_tts_file(content_str=row['chinese'], lang_name=voice_name, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
+    if data_settings['recording_id'] not in ['conly', 'cconvo']:
         create_tts_file(content_str=row['english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
     if data_settings['recording_id'] in ['001', '007', '009', 'ceword_components_cesent', 'ce_wordsent', 'cword_cecomponent_cesent_notes', 'ceword_components_csent', 'cce_cecsent']:
@@ -106,8 +110,12 @@ def load_audio(row, data_settings):
     pause_between_words = AudioSegment.silent(duration=data_settings['pause_between_words_ms'])
 
     dict_audio_durations = defaultdict(list)
-    chinese_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['chinese'].replace('/', '-')}.mp3")
-    if data_settings['recording_id'] not in ['conly']:
+    if data_settings['recording_id'] == 'cconvo':
+        voice_name = data_settings['voice_name_convo'][row['speaker']]
+    else:
+        voice_name = data_settings['voice_name_zh']
+    chinese_audio = load_one_audio_from_path(f"output/tts/{voice_name}/{row['chinese'].replace('/', '-')}.mp3")
+    if data_settings['recording_id'] not in ['conly', 'cconvo']:
         english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['english'].replace('/', '-')}.mp3")
     
     if data_settings['recording_id'] in ['001', '007', '009', 'ce_wordsent', 'cce_cecsent']:
@@ -419,7 +427,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif data_settings['recording_id'] == 'conly':
+    elif data_settings['recording_id'] in ['conly', 'cconvo']:
         combined = chinese_audio + pause_between_words
 
         dict_audio_durations['chinese'].append(row['chinese'])
