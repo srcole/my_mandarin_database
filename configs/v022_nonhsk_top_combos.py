@@ -1,7 +1,7 @@
 from constants import WORD_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = 'TODO'
+video_name = '19 of the most useful HSK 5 words: breakdown by hanzi + Chinese-English example sentences in 2 minutes'
 video_description = '''
 TODO
 Because these videos are programmatically generated, the format is customizable to quickly produce alternate formats with different vocabulary categories, so please let me know if you have any corrections, suggestions, feedback, or questions, please leave a comment.
@@ -13,15 +13,18 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 video_number = '22'
 data_settings = {
     'recording_id': 'ec_csent_scombo',
-    'filename_suffix': 'p12_k345_combos',
+    'filename_suffix': 'hsk5_top_scombos',
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
     'pause_between_words_ms': 1000,
-    'min_priority': 1, 'max_priority': 2,
-    'min_known_english_prompt': 3, 'max_known_english_prompt': 5,
-    'min_combo_quality': 4,
-    'max_count': 600,
+    'min_priority': 1, 'max_priority': 1,
+    'min_combo_quality': 3,
     'types_allowed': WORD_TYPES,
+    'pause_between_words_ms': 800,
+    'pause_start_ms': 200,
+    'hsk_levels_allowed': ['5'],
+    'min_adu': 5,
+    'min_per': 5,
 }
 
 
@@ -119,27 +122,27 @@ video_configs = {
             'font_size': 35,
             },
     },
-}
 
-# Video icon
-icon_configs = {
-    'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-    'word': '弱点', # UPDATE ON NEW VIDEO
-    'border_color_hex': "#1E90FF",
-    'border_width': 30,
+    # Video icon
+    'icon_configs': {
+        'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
+        'word': '更新', # UPDATE ON NEW VIDEO
+        'border_color_hex': "#1E90FF",
+        'border_width': 30,
+    },
 }
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': '我的高优先级未知单词',
-    'pinyin': 'Wǒ de gāo yōuxiān jí wèizhī dāncí',
-    'english': 'My high-priorty unknown words'
+    'chinese': '实用的HSK5词汇',
+    'pinyin': 'shíyòng de HSK5 cíhuì',
+    'english': 'Useful HSK 5 words'
     }  # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
-        'chinese': f"欢迎观看我的普通话数据库视频 {video_number}: {subtitle['chinese']}",
-        'pinyin': f"Huānyíng guānkàn wǒ de pǔtōnghuà shùjùkù shìpín {video_number}: {subtitle['pinyin']}",
-        'english': f"Welcome to my Mandarin Chinese Database Video {video_number}: {subtitle['english']}",
+        'chinese': f"我的普通话数据库视频 {video_number}",
+        'pinyin': f"wǒ de pǔtōnghuà shùjùkù shìpín {video_number}",
+        'english': f"My Mandarin Chinese Database Video {video_number}",
         'clip_index': 0,
         'change_index': -2,
         'pause_ms': 500,
@@ -147,7 +150,7 @@ nonvocab_slides = {
         'channel_title': ('My Mandarin Database', '我的普通话数据库'),
         'video_number': (f'Video #{video_number}', f'视频#{video_number}'),
         'video_name': (subtitle['english'], subtitle['chinese']),
-        'video_structure': ('Chinese first, English second\nExample sentences in both languages', '先中文，后英文\n两种语言的例句'),
+        'video_structure': ('English first, Chinese second\nExample Chinese sentences', '先英文，后中文\n并附中文例句'),
         'count_str': ("{n_vocab_words} words", "{n_vocab_words}个词汇"),
         'duration_str': ('{audio_duration_minutes:.0f} minutes', '{audio_duration_minutes:.0f}分钟'),
         'feedback': ('If you have any questions, suggestions, or feedback\nplease leave a comment', '如果你有任何问题、建议或反馈\n请留言'),
@@ -174,26 +177,26 @@ nonvocab_slides = {
     },
 
     'word_list': {
-        'chinese_unfill': '这些是将在接下来的{audio_duration_minutes:.0f}分钟内复习的{n_vocab}个单词',
-        'pinyin_unfill': 'Zhèxiē shì jiàng zài jiē xiàlái de {audio_duration_minutes:.0f} fēnzhōng nèi fùxí de {n_vocab} gè dāncí',
-        'english_unfill': 'These are the {n_vocab} words that will be reviewed over the next {audio_duration_minutes:.0f} minutes',
+        'chinese_unfill': '{audio_duration_minutes:.0f}分钟, {n_vocab}个单词',
+        'pinyin_unfill': '{audio_duration_minutes:.0f} fēnzhōng, {n_vocab} gè dāncí',
+        'english_unfill': '{audio_duration_minutes:.0f} minutes, {n_vocab} words',
         'clip_index': 1,
         'change_index': -1,
         'pause_ms': 500,
 
-        'y_top': 10,
-        'y_bottom': 100,
-        'x_top': 10,
-        'spacing': 2,
-        'font_size': 12,
+        'y_top': 40,
+        'y_bottom': 150,
+        'x_top': 20,
+        'spacing': 10,
+        'font_size': 26,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 2,
-        'col_space_big': 4,
+        'col_space': 10,
+        'col_space_big': 20,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 50, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 70, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 90, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 100, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 200, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 290, 'font_path': hanzi_font_path},
         },
     },
 
@@ -205,19 +208,19 @@ nonvocab_slides = {
         'change_index': None,
         'pause_ms': 500,
 
-        'y_top': 10,
-        'y_bottom': 100,
-        'x_top': 10,
-        'spacing': 2,
-        'font_size': 12,
+        'y_top': 40,
+        'y_bottom': 150,
+        'x_top': 20,
+        'spacing': 10,
+        'font_size': 26,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 2,
-        'col_space_big': 4,
+        'col_space': 10,
+        'col_space_big': 20,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 50, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 70, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 90, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 100, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 200, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 290, 'font_path': hanzi_font_path},
         },
     }
 }

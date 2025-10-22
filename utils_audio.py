@@ -137,7 +137,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
         dict_audio_durations['d_sent_english'].append(sent_english_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['rel_start_sent_english'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + 0.5)
@@ -159,7 +159,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
@@ -174,7 +174,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_english'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_english'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_chinese'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + .5)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 0.3 + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
@@ -222,7 +222,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_component_words'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_component_words'][-1] + dict_audio_durations['d_component_words'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
 
@@ -272,7 +272,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
         dict_audio_durations['d_sent_english'].append(sent_english_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_component_words'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_component_words'][-1] + dict_audio_durations['d_component_words'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
@@ -322,7 +322,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_component_words'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_component_words'][-1] + dict_audio_durations['d_component_words'][-1] + dict_audio_durations['d_chinese_slow'][-1] + 1)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
@@ -354,7 +354,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_english'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_english'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_chinese'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
@@ -375,7 +375,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.5)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + 0.5)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
@@ -395,7 +395,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_sent'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1] + 0.3)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
@@ -409,7 +409,7 @@ def load_audio(row, data_settings):
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + chinese_audio.duration_seconds + 0.3)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['d_chinese'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
@@ -423,7 +423,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + 0.5)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds + chinese_audio.duration_seconds + 0.5)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['rel_start_english'].append(dict_audio_durations['rel_start_chinese'][-1] + dict_audio_durations['d_chinese'][-1])
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_english'][-1] + dict_audio_durations['d_english'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
@@ -437,7 +437,7 @@ def load_audio(row, data_settings):
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
 
-        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_between_words_ms']/1000)
+        dict_audio_durations['rel_start_chinese'].append(data_settings['pause_start_ms']/1000)
         dict_audio_durations['sum_theory'].append(dict_audio_durations['d_chinese'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
@@ -508,7 +508,12 @@ def generate_nonvocab_audio_and_compute_durations(data_settings, df_vocab_audio_
         # Generate audio if not already exists
         nv_settings['file_path'] = f"{project_artifacts_folder}/{nv_settings['chinese']}.mp3"
         if not os.path.exists(nv_settings['file_path']):
-            single_tts_call(nv_settings['chinese'], data_settings['voice_name_zh'], nv_settings['file_path'])
+            try:
+                single_tts_call(nv_settings['chinese'], data_settings['voice_name_zh'], nv_settings['file_path'])
+            except Exception as e:
+                print(f"Error generating non-vocab audio for {nv_name}: {e}")
+                print(f"Use GTTS instead: {nv_settings['chinese']}")
+                single_tts_call(nv_settings['chinese'], 'zh', nv_settings['file_path'])
             print(f'Generated {nv_settings['chinese']}')
         else:
             print(f'{nv_name} audio already generated: {nv_settings['chinese']}')

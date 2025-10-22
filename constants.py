@@ -29,4 +29,5 @@ default_settings = {
     'custom_filters': None,
     'pause_between_words_ms': 1000,
     'pause_start_ms': 0,
+    'hsk_levels_allowed': None,
 }

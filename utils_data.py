@@ -16,7 +16,7 @@ def load_raw_data():
     cols_keep = [
         'id', 'chinese', 'pinyin', 'english',
         'type', 'priority', 'known', 'known_pinyin_prompt', 'known_english_prompt',
-        'phonetic', 'category1', 'category2', 'quality',
+        'phonetic', 'category1', 'category2', 'quality', 'hsk_level',
         'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
         'sentence', 'sentence_pinyin', 'sentence_english', 'date', 'cat1', 'per', 'adu']
     sheet_url = 'https://docs.google.com/spreadsheets/d/1pw9EAIvtiWenPDBFBIf7pwTh0FvIbIR0c3mY5gJwlDk/edit#gid=0'
@@ -25,6 +25,7 @@ def load_raw_data():
     df = df.dropna(subset=['chinese', 'english'])
     df['known_english_prompt'] = df['known_english_prompt'].fillna(6)
     df['known_pinyin_prompt'] = df['known_pinyin_prompt'].fillna(6)
+    df['hsk_level'] = df['hsk_level'].fillna('MISSING')
     df['quality'] = df['quality'].fillna(6)
     df['per'] = df['per'].fillna(5)
     df['adu'] = df['adu'].fillna(5)
@@ -97,6 +98,7 @@ def filter_df_to_vocab_of_interest(df, data_settings):
                 (df['category1'].isin(data_settings['categories_allowed']) if data_settings['categories_allowed'] is not None else True) &
                 (df['category2'].isin(data_settings['categories2_allowed']) if data_settings['categories2_allowed'] is not None else True) &
                 (df['cat1'].isin(data_settings['cat1_values_allowed']) if data_settings['cat1_values_allowed'] is not None else True) &
+                (df['hsk_level'].isin(data_settings['hsk_levels_allowed']) if data_settings['hsk_levels_allowed'] is not None else True) &
                 (~df['chinese'].isin(data_settings['exclude_words']) if data_settings['exclude_words'] is not None else True)
             ]
         df_filt = _filter_by_recording_type(df_filt, data_settings['recording_id'])
@@ -134,7 +136,7 @@ def delete_previous_attempt_files(project_artifacts_folder):
         os.remove(f"{project_artifacts_folder}/audio_durations_all.csv")
     if os.path.exists(f"{project_artifacts_folder}/audio_durations_vocab_only.csv"):
         os.remove(f"{project_artifacts_folder}/audio_durations_vocab_only.csv")
-    if os.path.exists(f"{project_artifacts_folder}/video.mp4"):
-        os.remove(f"{project_artifacts_folder}/video.mp4")
+    if os.path.exists(f"{project_artifacts_folder}/video_{project_artifacts_folder.split('/')[-1]}.mp4"):
+        os.remove(f"{project_artifacts_folder}/video_{project_artifacts_folder.split('/')[-1]}.mp4")
     if os.path.exists(f"{project_artifacts_folder}/audio.mp3"):
         os.remove(f"{project_artifacts_folder}/audio.mp3")

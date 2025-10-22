@@ -128,7 +128,7 @@ def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_art
         raise ValueError('Difference between audio and video durations too high.')
 
     # Create final video file, if doesn't already exist
-    video_file_name = f"{project_artifacts_folder}/video.mp4"
+    video_file_name = f"{project_artifacts_folder}/video_{project_artifacts_folder.split('/')[-1]}.mp4"
     if os.path.exists(video_file_name):
         print(f"Video already exists: {video_file_name}, skipping...")
     else:
