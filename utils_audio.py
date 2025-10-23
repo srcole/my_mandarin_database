@@ -54,14 +54,18 @@ def create_tts_file(content_str, lang_name, last_timestamp, chinese_char, record
 
 
 def create_tts_files_for_one_vocab_word(row, data_settings):
+    # Chinese audio
     if data_settings['recording_id'] == 'cconvo':
         voice_name = data_settings['voice_name_convo'][row['speaker']]
     else:
         voice_name = data_settings['voice_name_zh']
     create_tts_file(content_str=row['chinese'], lang_name=voice_name, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
-    if data_settings['recording_id'] not in ['conly', 'cconvo']:
+    
+    # English audio
+    if data_settings['recording_id'] not in ['conly', 'cconvo', 'chinese_only_word_twice']:
         create_tts_file(content_str=row['english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
+    # Sentence audio
     if data_settings['recording_id'] in ['001', '007', '009', 'ceword_components_cesent', 'ce_wordsent', 'cword_cecomponent_cesent_notes', 'ceword_components_csent', 'cce_cecsent']:
         create_tts_file(content_str=row['sentence'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         create_tts_file(content_str=row['sentence_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
@@ -69,6 +73,7 @@ def create_tts_files_for_one_vocab_word(row, data_settings):
     if data_settings['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent', 'ec_csent_scombo']:
         create_tts_file(content_str=row['sentence'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
+    # Component words audio
     if data_settings['recording_id'] in ['ceword_components_cesent', '006', 'ceword_components_csent', 'ec_csent_scombo']:
         create_tts_file(content_str=row['word1'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         create_tts_file(content_str=row['word2'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
@@ -111,14 +116,18 @@ def load_audio(row, data_settings):
     pause_start = AudioSegment.silent(duration=data_settings['pause_start_ms'])
 
     dict_audio_durations = defaultdict(list)
+    # Chinese audio
     if data_settings['recording_id'] == 'cconvo':
         voice_name = data_settings['voice_name_convo'][row['speaker']]
     else:
         voice_name = data_settings['voice_name_zh']
     chinese_audio = load_one_audio_from_path(f"output/tts/{voice_name}/{row['chinese'].replace('/', '-')}.mp3")
-    if data_settings['recording_id'] not in ['conly', 'cconvo']:
+
+    # English audio
+    if data_settings['recording_id'] not in ['conly', 'cconvo', 'chinese_only_word_twice']:
         english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['english'].replace('/', '-')}.mp3")
     
+    # Sentence audio and dict construction as needed
     if data_settings['recording_id'] in ['001', '007', '009', 'ce_wordsent', 'cce_cecsent']:
         sent_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         sent_english_audio = load_one_audio_from_path(f"output/tts/{data_settings['voice_name_en']}/{row['sentence_english']}.mp3")

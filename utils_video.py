@@ -363,7 +363,7 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
-    elif recording_id in ['cword2x', 'conly', 'cconvo']:
+    elif recording_id in ['cword2x', 'conly', 'cconvo', 'chinese_only_word_twice']:
         texts_dict = {
         'english': {'text': row['english'],
             'save_clip': False,

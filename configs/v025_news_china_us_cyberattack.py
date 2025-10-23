@@ -1,5 +1,5 @@
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = 'China-US soybean trade conflict: Chinese listening practice with the news (English translations)'
+video_name = 'China accuses US of cyberattack: Chinese listening practice with the news (English translations)'
 video_description = '''
 This video was made for practicing both listening comprehension and character recognition.
 
@@ -11,13 +11,13 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 '''
 
 # Main settings  # UPDATE ON NEW VIDEO
-video_number = '23'
+video_number = '25'
 data_settings = {
     'recording_id': 'conly',
-    'filename_suffix': 'chatgpt_soybeans',
+    'filename_suffix': 'news_cyberattack',
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     # 'voice_name_zh': 'zh',
-    'different_file_name': 'static/texts/news/20251020_soybeans.csv',
+    'different_file_name': 'static/texts/news/20251022_us_china_cyberattack.csv',
     'sort_keys': ['index'],
     'sort_asc': [True],
     'pause_between_words_ms': 1000,
@@ -95,7 +95,7 @@ video_configs = {
     # Video icon
     'icon_configs': {
         'file_suffix': '_chinese', # UPDATE ON NEW VIDEO
-        'word': '自美国的进口为零', # UPDATE ON NEW VIDEO
+        'word': '他们先入侵员工手机设备并窃取敏感数据', # UPDATE ON NEW VIDEO
         'border_color_hex': "#1E90FF",
         'border_width': 30,
     },
@@ -103,9 +103,9 @@ video_configs = {
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': '中美大豆贸易冲突',
-    'pinyin': 'zhōng měi dàdòu màoyì chōngtú',
-    'english': 'China-US soybean trade conflict'
+    'chinese': '中国指责美国发动网络攻击',
+    'pinyin': 'zhōng guó zhǐzé měi guó fādòng wǎngluò gōngjí',
+    'english': 'China accuses the U.S. of cyberattacks'
     }  # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
