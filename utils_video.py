@@ -224,6 +224,12 @@ def draw_logo(draw, video_configs):
 
 def draw_previous_word(draw, video_configs, previous_word):
     if previous_word != '':
+        if 'n_lines_max' in video_configs['previous_word'].keys():
+            previous_word = break_text_into_lines(
+                previous_word, 
+                ImageFont.truetype(video_configs['previous_word']['font_name'], video_configs['previous_word']['font_size']),
+                video_configs['previous_word']['line_length'],
+                video_configs['previous_word']['n_lines_max'])
         draw.multiline_text(
             xy=(video_configs['previous_word']['x'], video_configs['bg_size'][1] - video_configs['previous_word']['y']),
             text=previous_word,
@@ -405,6 +411,31 @@ def compute_text_dict_from_row(recording_id, row):
             'save_clip': True,
             'duration': row['start_sent'] - row['start_chinese'],
             'timestamp_start': row['start_chinese'],
+            },
+        'sentence_chinese': {'text': row['sentence'],
+            'save_clip': False},
+        'sentence_pinyin': {'text': row['sentence_pinyin'],
+            'save_clip': False,
+            },
+        'sentence_english': {'text': row['sentence_english'],
+            'save_clip': True,
+            'duration': row['end'] - row['start_sent'],
+            'timestamp_start': row['start_sent'],
+            },
+    }
+
+    elif recording_id == 'ce_csent':
+        texts_dict = {
+        'chinese': {
+            'text': f"{row['chinese']} ({row['pinyin']})",
+            'save_clip': True,
+            'duration': row['start_english'] - row['start'],
+            'timestamp_start': row['start'],
+            },
+        'english': {'text': row['english'],
+            'save_clip': True,
+            'duration': row['start_sent'] - row['start_english'],
+            'timestamp_start': row['start_english'],
             },
         'sentence_chinese': {'text': row['sentence'],
             'save_clip': False},

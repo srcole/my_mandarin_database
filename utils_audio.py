@@ -70,7 +70,7 @@ def create_tts_files_for_one_vocab_word(row, data_settings):
         create_tts_file(content_str=row['sentence'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         create_tts_file(content_str=row['sentence_english'], lang_name=data_settings['voice_name_en'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
-    if data_settings['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent', 'ec_csent_scombo']:
+    if data_settings['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent', 'ec_csent_scombo', 'ce_csent']:
         create_tts_file(content_str=row['sentence'], lang_name=data_settings['voice_name_zh'], last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
     # Component words audio
@@ -369,7 +369,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sum_theory'].append(dict_audio_durations['rel_start_sent'][-1] + dict_audio_durations['d_sent'][-1] + data_settings['pause_between_words_ms']/1000)
         dict_audio_durations['combined'].append(combined.duration_seconds)
 
-    elif data_settings['recording_id'] in ['ec_csent']:
+    elif data_settings['recording_id'] in ['ce_csent']:
         sent_audio = AudioSegment.from_mp3(f"output/tts/{data_settings['voice_name_zh']}/{row['sentence']}.mp3")
         combined = pause_start + chinese_audio + pause_500ms + english_audio + pause_500ms + sent_audio + pause_between_words
 

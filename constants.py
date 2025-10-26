@@ -1,6 +1,6 @@
 from datetime import date
 
-WORD_TYPES = ['combo', 'no combo', 'two word', 'prefix', 'single char', 'suffix', 'abbreviation']
+WORD_TYPES = ['combo', 'no combo', 'two word', 'prefix', 'single char', 'suffix', 'abbreviation', 'multi_word', 'verb_ending']
 PHRASE_TYPES = ['phrase', 'part sent', 'phrase_save', 'speak_phrase', 'saying', 'idiom', 'slang', 'signs', 'signs_uncommon']
 SENT_TYPES = ['sentence']
 PROPER_NOUN_TYPES = ['proper noun']
@@ -30,4 +30,6 @@ default_settings = {
     'pause_between_words_ms': 1000,
     'pause_start_ms': 0,
     'hsk_levels_allowed': None,
+    'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
+    'voice_name_en': 'zh-CN-XiaoyuMultilingualNeural',
 }
