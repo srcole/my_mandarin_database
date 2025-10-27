@@ -107,7 +107,7 @@ def draw_text_and_save_clip(img, draw, clips, text_settings, video_configs, curr
     return img, draw, clips
 
 
-def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_artifacts_folder):
+def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_artifacts_folder, data_settings):
     # Add duration and start time to each clip
     clips_all = clips.copy()
     if nonvocab_slides is not None:
@@ -120,7 +120,7 @@ def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_art
     print(f"Number of clips: {len(clips_all)}")
 
     # Compare durations of audio and video
-    audio = AudioFileClip(f"{project_artifacts_folder}/audio.mp3")
+    audio = AudioFileClip(data_settings['audio_path'])
     all_clips_duration = sum(clip.duration for clip in clips_all)
     audio_video_duration_diff = audio.duration - all_clips_duration
     print(f"audio: {audio.duration:.3f}s, video: {all_clips_duration:.3f}s; difference: {audio_video_duration_diff:.3f}s")
@@ -128,15 +128,14 @@ def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_art
         raise ValueError('Difference between audio and video durations too high.')
 
     # Create final video file, if doesn't already exist
-    video_file_name = f"{project_artifacts_folder}/video_{project_artifacts_folder.split('/')[-1]}.mp4"
-    if os.path.exists(video_file_name):
-        print(f"Video already exists: {video_file_name}, skipping...")
+    if os.path.exists(data_settings['video_path']):
+        print(f"Video already exists: {data_settings['video_path']}, skipping...")
     else:
         video = CompositeVideoClip(clips_all, size=(1280,720))
-        audio = AudioFileClip(f"{project_artifacts_folder}/audio.mp3")
+        audio = AudioFileClip(data_settings['audio_path'])
         video.audio = audio
         video.duration = audio.duration
-        video.write_videofile(video_file_name, fps=24)
+        video.write_videofile(data_settings['video_path'], fps=24)
 
 
 def create_icon_from_slide(icon_configs, video_configs, project_artifacts_folder):

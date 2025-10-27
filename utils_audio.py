@@ -560,7 +560,7 @@ def generate_nonvocab_audio_and_compute_durations(data_settings, df_vocab_audio_
     return df_vocab_audio_durations, audio_filler_variables, nonvocab_slides
 
 
-def create_final_audio_from_each_word_and_nonvocab(df_vocab_audio_durations, project_artifacts_folder, data_settings):
+def create_final_audio_from_each_word_and_nonvocab(df_vocab_audio_durations, data_settings):
     start_time = time.time()
     # Construct list of individual audio files
     all_audio_files = []
@@ -576,8 +576,8 @@ def create_final_audio_from_each_word_and_nonvocab(df_vocab_audio_durations, pro
     audio_concat = all_audio_files[0]
     for audio in all_audio_files[1:]:
         audio_concat += audio
-    audio_concat.export(f"{project_artifacts_folder}/audio.mp3", format="mp3")
-    print(f"{(time.time()-start_time):.2f}s, {project_artifacts_folder}/audio.mp3")
+    audio_concat.export(data_settings['audio_path'], format="mp3")
+    print(f"{(time.time()-start_time):.2f}s, {data_settings['audio_path']}")
 
 
 def create_dataframe_edge_tts_voices():

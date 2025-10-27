@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import os
 from constants import default_settings
+from collections import defaultdict
 
 
 def fill_default_settings(data_settings):
@@ -93,10 +94,13 @@ def filter_df_to_vocab_of_interest(df, data_settings):
                 (df['adu'] >= data_settings['min_adu']) &
                 (df['per'] >= data_settings['min_per']) &
                 (df['date'] >= data_settings['min_date']) &
+                (df['date'] < data_settings['max_date']) &
                 (df['type'].isin(data_settings['types_allowed'])) &
                 (df['chinese'].str.contains(data_settings['contains_character']) if data_settings['contains_character'] is not None else True) &
                 (df['category1'].isin(data_settings['categories_allowed']) if data_settings['categories_allowed'] is not None else True) &
                 (df['category2'].isin(data_settings['categories2_allowed']) if data_settings['categories2_allowed'] is not None else True) &
+                (~df['category1'].isin(data_settings['categories_not_allowed']) if data_settings['categories_not_allowed'] is not None else True) &
+                (~df['category2'].isin(data_settings['categories2_not_allowed']) if data_settings['categories2_not_allowed'] is not None else True) &
                 (df['cat1'].isin(data_settings['cat1_values_allowed']) if data_settings['cat1_values_allowed'] is not None else True) &
                 (df['hsk_level'].isin(data_settings['hsk_levels_allowed']) if data_settings['hsk_levels_allowed'] is not None else True) &
                 (~df['chinese'].isin(data_settings['exclude_words']) if data_settings['exclude_words'] is not None else True)
@@ -131,12 +135,51 @@ def pinyin_to_tones(pinyin):
     return tones
 
 
-def delete_previous_attempt_files(project_artifacts_folder):
+def delete_previous_attempt_files(project_artifacts_folder, data_settings):
     if os.path.exists(f"{project_artifacts_folder}/audio_durations_all.csv"):
         os.remove(f"{project_artifacts_folder}/audio_durations_all.csv")
     if os.path.exists(f"{project_artifacts_folder}/audio_durations_vocab_only.csv"):
         os.remove(f"{project_artifacts_folder}/audio_durations_vocab_only.csv")
-    if os.path.exists(f"{project_artifacts_folder}/video_{project_artifacts_folder.split('/')[-1]}.mp4"):
-        os.remove(f"{project_artifacts_folder}/video_{project_artifacts_folder.split('/')[-1]}.mp4")
-    if os.path.exists(f"{project_artifacts_folder}/audio.mp3"):
-        os.remove(f"{project_artifacts_folder}/audio.mp3")
+    if os.path.exists(data_settings['video_path']):
+        os.remove(data_settings['video_path'])
+    if os.path.exists(data_settings['audio_path']):
+        os.remove(data_settings['audio_path'])
+
+
+def create_or_load_character_appearances():
+    character_appearances_path = 'static/character_appearances.csv'
+    if os.path.exists(character_appearances_path):
+        print(f"Loading character appearances from {character_appearances_path}")
+        df_character_appearances = pd.read_csv(character_appearances_path)
+    else:
+        print(f"Computing character appearances...")
+        df_all_vocab = pd.read_csv('static/latest_data.csv')
+        types_allowed = [
+            'combo', 'proper noun', 'two word', 'suffix', 'no combo', 'prefix', 'single char', 'slang', 'abbreviation'
+        ]
+        cols_keep = ['chinese', 'pinyin', 'english', 'priority', 'hsk_level']
+        df_all_vocab = df_all_vocab[
+            (df_all_vocab['type'].isin(types_allowed)) & 
+            (df_all_vocab['adu'] >= 3) &
+            (df_all_vocab['per'] >= 3)
+            ].reset_index(drop=True)
+        df_all_vocab['hsk_level'] = None
+
+        df_all_hsk = pd.read_csv('static/hsk/hsk_1to6_sent.csv', index_col=0)
+        hsk_levels_allowed = [1, 2, 3, 4]
+        df_all_hsk = df_all_hsk[df_all_hsk['hsk_level'].isin(hsk_levels_allowed)].reset_index(drop=True)
+        df_all_hsk['priority'] = 4
+
+        df_all = pd.concat([df_all_vocab[cols_keep], df_all_hsk[cols_keep]]).reset_index(drop=True)
+        df_all = df_all.drop_duplicates(subset=['chinese']).reset_index(drop=True)
+
+        dict_character_appearances = defaultdict(list)
+        for _, row in df_all.iterrows():
+            for char in row['chinese']:
+                dict_character_appearances['character'].append(char)
+                dict_character_appearances['word'].append(row['chinese'])
+                dict_character_appearances['priority'].append(row['priority'])
+                dict_character_appearances['hsk_level'].append(row['hsk_level'])
+        df_character_appearances = pd.DataFrame(dict_character_appearances)
+        df_character_appearances.to_csv('static/character_appearances.csv', index=False)
+    return df_character_appearances
