@@ -112,6 +112,7 @@ def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_art
     clips_all = clips.copy()
     if nonvocab_slides is not None:
         for cs_name, cs_set in nonvocab_slides.items():
+            print(cs_name)
             image_with_duration = ImageClip(f'{project_artifacts_folder}/{cs_name}.png', duration=cs_set['duration']).with_start(cs_set['start'])
             if cs_set['clip_index'] >= 0:
                 clips_all.insert(cs_set['clip_index'], image_with_duration)
