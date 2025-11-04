@@ -19,6 +19,7 @@ def load_raw_data():
         'type', 'priority', 'known', 'known_pinyin_prompt', 'known_english_prompt',
         'phonetic', 'category1', 'category2', 'quality', 'hsk_level',
         'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
+        'voice_zh', 'voice_en',
         'sentence', 'sentence_pinyin', 'sentence_english', 'date', 'cat1', 'per', 'adu']
     sheet_url = 'https://docs.google.com/spreadsheets/d/1pw9EAIvtiWenPDBFBIf7pwTh0FvIbIR0c3mY5gJwlDk/edit#gid=0'
     sheet_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
@@ -66,6 +67,16 @@ def _filter_df(df, col_name, val, operator_str):
         return df[df[col_name] <= val]
     else:
         raise ValueError(f"Unknown operator_str: {operator_str}")
+    
+
+def _extract_components_to_video_notes(row):
+    if pd.isna(row['word1']):
+        return ''
+    components = []
+    for i in range(1, 5):
+        if pd.notna(row[f'word{i}']):
+            components.append(f'{row[f'word{i}']}: {row[f'word{i}_english']}')
+    return '\n'.join(components)
 
 
 def filter_df_to_vocab_of_interest(df, data_settings):
@@ -109,6 +120,8 @@ def filter_df_to_vocab_of_interest(df, data_settings):
    
     if data_settings['sort_keys'] is not None and data_settings['sort_asc'] is not None:
         df_filt = df_filt.sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
+    if data_settings['silent_components']:
+        df_filt['video_notes'] = df_filt.apply(_extract_components_to_video_notes, axis=1)
     df_filt = (df_filt
         .reset_index(drop=True)
         .head(data_settings['max_count'])

@@ -6,6 +6,7 @@ SENT_TYPES = ['sentence']
 PROPER_NOUN_TYPES = ['proper noun']
 IDIOM_TYPES = ['idiom']
 ALL_TYPES = WORD_TYPES + PHRASE_TYPES + SENT_TYPES + PROPER_NOUN_TYPES + IDIOM_TYPES
+NON_SENTENCE_TYPES = WORD_TYPES + PHRASE_TYPES + PROPER_NOUN_TYPES + IDIOM_TYPES
 default_settings = {
     'min_priority': 1, 'max_priority': 4,
     'min_known_english_prompt': 1, 'max_known_english_prompt': 6,
@@ -34,5 +35,12 @@ default_settings = {
     'pause_start_ms': 0,
     'hsk_levels_allowed': None,
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
-    'voice_name_en': 'zh-CN-XiaoyuMultilingualNeural',
+    'voice_name_en': 'en-US-AvaMultilingualNeural',
+    'voice_name_zh_backups': {
+        'v2': 'zh-CN-XiaozhenNeural'
+        },
+    'voice_name_en_backups': {
+        'v2': 'en-US-MichelleNeural'
+        },
+    'silent_components': False,
 }
