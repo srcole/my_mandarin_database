@@ -1,7 +1,7 @@
 from constants import NON_SENTENCE_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '317 Chinese vocabulary words from Codenames game (+ example sentences)'
+video_name = '315 Chinese vocabulary words from Codenames game (+ example sentences)'
 video_description = '''
 This video was made for quickly practicing both Chinese listening comprehension and character recognition.
 
@@ -17,7 +17,7 @@ video_number = '36'
 data_settings = {
     'recording_id': 'ce_csent',
     'filename_suffix': 'codenames',
-    'different_file_name': 'static/texts/lists/codenames_list_317.csv',
+    'different_file_name': 'static/texts/lists/codenames_list_315_added_voice_cols.csv',
     'sort_keys': ['index'],
     'sort_asc': [True],
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
