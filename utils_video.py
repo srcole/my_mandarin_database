@@ -532,8 +532,13 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             n_lines_max = 1
 
     for _, text_dict in texts_dict.items():
+        if 'n_lines_max' in text_dict.keys():
+            n_lines_max_this_text = text_dict['n_lines_max'] 
+        else:
+            n_lines_max_this_text = n_lines_max
+
         img, draw, clips = draw_text_and_save_clip(
-            img, draw, clips, text_dict, video_configs, current_image_file_path, n_lines_max)
+            img, draw, clips, text_dict, video_configs, current_image_file_path, n_lines_max_this_text)
         
 
 def generate_intro_slide(video_configs, intro_configs, subtitle_text_configs, audio_filler_variables):

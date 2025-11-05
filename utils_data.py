@@ -17,10 +17,10 @@ def load_raw_data():
     cols_keep = [
         'id', 'chinese', 'pinyin', 'english',
         'type', 'priority', 'known', 'known_pinyin_prompt', 'known_english_prompt',
-        'phonetic', 'category1', 'category2', 'quality', 'hsk_level',
+        'phonetic', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'quality', 'hsk_level',
         'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
         'voice_zh', 'voice_en',
-        'sentence', 'sentence_pinyin', 'sentence_english', 'date', 'cat1', 'per', 'adu']
+        'sentence', 'sentence_pinyin', 'sentence_english', 'date', 'source1', 'per', 'adu']
     sheet_url = 'https://docs.google.com/spreadsheets/d/1pw9EAIvtiWenPDBFBIf7pwTh0FvIbIR0c3mY5gJwlDk/edit#gid=0'
     sheet_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
     df = pd.read_csv(sheet_url)[cols_keep]
@@ -112,7 +112,11 @@ def filter_df_to_vocab_of_interest(df, data_settings):
                 (df['category2'].isin(data_settings['categories2_allowed']) if data_settings['categories2_allowed'] is not None else True) &
                 (~df['category1'].isin(data_settings['categories_not_allowed']) if data_settings['categories_not_allowed'] is not None else True) &
                 (~df['category2'].isin(data_settings['categories2_not_allowed']) if data_settings['categories2_not_allowed'] is not None else True) &
-                (df['cat1'].isin(data_settings['cat1_values_allowed']) if data_settings['cat1_values_allowed'] is not None else True) &
+                (df['cat_v3'].isin(data_settings['cat_v3_allowed']) if data_settings['cat_v3_allowed'] is not None else True) &
+                (df['cat2_v3'].isin(data_settings['cat2_v3_allowed']) if data_settings['cat2_v3_allowed'] is not None else True) &
+                (~df['cat_v3'].isin(data_settings['cat_v3_not_allowed']) if data_settings['cat_v3_not_allowed'] is not None else True) &
+                (~df['cat2_v3'].isin(data_settings['cat2_v3_not_allowed']) if data_settings['cat2_v3_not_allowed'] is not None else True) &
+                (df['source1'].isin(data_settings['source1_values_allowed']) if data_settings['source1_values_allowed'] is not None else True) &
                 (df['hsk_level'].isin(data_settings['hsk_levels_allowed']) if data_settings['hsk_levels_allowed'] is not None else True) &
                 (~df['chinese'].isin(data_settings['exclude_words']) if data_settings['exclude_words'] is not None else True)
             ]

@@ -1,7 +1,7 @@
 from constants import NON_SENTENCE_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '315 Chinese vocabulary words from Codenames game (+ example sentences)'
+video_name = 'Chinese Codenames game - 315 vocabulary words translated (+ example sentences)'
 video_description = '''
 This video was made for quickly practicing both Chinese listening comprehension and character recognition.
 
