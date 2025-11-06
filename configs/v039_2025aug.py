@@ -1,7 +1,7 @@
 from constants import NON_SENTENCE_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '189 Chinese vocab words/phrases + example sentences & character breakdown (new monthly, Sep 2025)'
+video_name = 'X Chinese vocab words/phrases + example sentences & character breakdown (new monthly, Aug 2025)'
 video_description = '''
 This video was made for quickly practicing both Chinese listening comprehension and character recognition.
 
@@ -13,11 +13,11 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 '''
 
 # Main settings  # UPDATE ON NEW VIDEO
-video_number = '37'
+video_number = '39'
 data_settings = {
     'recording_id': 'ce_csent',
     'silent_components': True,
-    'filename_suffix': '2025sep_words',
+    'filename_suffix': '2025aug_words',
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
     'min_priority': 1, 'max_priority': 5,
@@ -27,16 +27,11 @@ data_settings = {
     'types_allowed': NON_SENTENCE_TYPES,
     'pause_between_words_ms': 800,
     'pause_start_ms': 200,
-    'categories2_not_allowed': [
-        '36 questions', 'medical dept', 'chatgpt_slang', 'treatments', 'disease;symptom', 'body;organs', 'staff', 'other'
+    'cat_v3_not_allowed': [
+        'data',
         ],
-    'categories_not_allowed': ['data'],
-    'cat2_v3_not_allowed': [
-        'cat_vocab', 'brands', 'mario party', 'mario character', 'mario kart', 'reproductive health',
-        'modal particle', 'app name',
-        ],
-    'min_date': '2025-09-01',
-    'max_date': '2025-10-01',
+    'min_date': '2025-08-01',
+    'max_date': '2025-09-01',
 }
 
 
@@ -53,12 +48,6 @@ DEFAULT_TEXT_PROPERTIES = {
 
 # Aesthetic configs
 video_configs = {
-    'bg_size': (1280, 720),
-    'bg_color': 'white',
-    'text_color': 'black',
-    'max_line_length_buffer_size': 60,
-    'decrease_font_step_size': 1,
-
     'vocab_font_sizes': {
         'words': 50,
         'components': 40,

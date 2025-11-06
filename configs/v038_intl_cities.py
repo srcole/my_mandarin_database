@@ -1,7 +1,7 @@
 from constants import NON_SENTENCE_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '189 Chinese vocab words/phrases + example sentences & character breakdown (new monthly, Sep 2025)'
+video_name = '66 international cities in Chinese (+ example sentences) in 8 minutes'
 video_description = '''
 This video was made for quickly practicing both Chinese listening comprehension and character recognition.
 
@@ -13,30 +13,13 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 '''
 
 # Main settings  # UPDATE ON NEW VIDEO
-video_number = '37'
+video_number = '38'
 data_settings = {
     'recording_id': 'ce_csent',
     'silent_components': True,
-    'filename_suffix': '2025sep_words',
-    'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
-    'voice_name_en': 'en-US-AvaMultilingualNeural',
-    'min_priority': 1, 'max_priority': 5,
-    'min_known_english_prompt': 1, 'max_known_english_prompt': 5,
-    'min_adu': 3,
-    'min_per': 3,
-    'types_allowed': NON_SENTENCE_TYPES,
-    'pause_between_words_ms': 800,
-    'pause_start_ms': 200,
-    'categories2_not_allowed': [
-        '36 questions', 'medical dept', 'chatgpt_slang', 'treatments', 'disease;symptom', 'body;organs', 'staff', 'other'
-        ],
-    'categories_not_allowed': ['data'],
-    'cat2_v3_not_allowed': [
-        'cat_vocab', 'brands', 'mario party', 'mario character', 'mario kart', 'reproductive health',
-        'modal particle', 'app name',
-        ],
-    'min_date': '2025-09-01',
-    'max_date': '2025-10-01',
+    'filename_suffix': 'intl_cities',
+    'max_priority': 6,
+    'categories2_allowed': ['international city'],
 }
 
 
@@ -53,12 +36,6 @@ DEFAULT_TEXT_PROPERTIES = {
 
 # Aesthetic configs
 video_configs = {
-    'bg_size': (1280, 720),
-    'bg_color': 'white',
-    'text_color': 'black',
-    'max_line_length_buffer_size': 60,
-    'decrease_font_step_size': 1,
-
     'vocab_font_sizes': {
         'words': 50,
         'components': 40,
@@ -145,7 +122,7 @@ video_configs = {
 
     'icon_configs': {
         'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-        'word': '耳塞', # UPDATE ON NEW VIDEO
+        'word': '伦敦', # UPDATE ON NEW VIDEO
         'border_color_hex': "#1E90FF",
         'border_width': 30,
     },
@@ -153,9 +130,9 @@ video_configs = {
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': '我2025年9月的新词汇',
-    'pinyin': 'wǒ 2025 nián 9 yuè de xīn cíhuì',
-    'english': 'My new September 2025 vocabulary',
+    'chinese': '国际城市',
+    'pinyin': 'guójì chéngshì',
+    'english': 'International Cities',
     }  # UPDATE ON NEW VIDEO
 video_structure_tup = ('Chinese first, English second\nExample Chinese sentences', '先中文，后英文\n并附中文例句')
 # UPDATE ON NEW VIDEO
@@ -208,16 +185,16 @@ nonvocab_slides = {
         'y_top': 10,
         'y_bottom': 85,
         'x_top': 10,
-        'spacing': 2,
-        'font_size': 14,
+        'spacing': 4,
+        'font_size': 23,
         'fill': '#000000',
         'align': 'left',
         'col_space': 2,
         'col_space_big': 4,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 55, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 85, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 105, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 100, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 170, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 145, 'font_path': hanzi_font_path},
         }
     }
 }

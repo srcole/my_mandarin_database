@@ -16,11 +16,12 @@ def fill_default_settings(data_settings):
 def load_raw_data():
     cols_keep = [
         'id', 'chinese', 'pinyin', 'english',
-        'type', 'priority', 'known', 'known_pinyin_prompt', 'known_english_prompt',
-        'phonetic', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'quality', 'hsk_level',
-        'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
+        'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'hsk_level',
+        'known', 'known_pinyin_prompt', 'known_english_prompt',
+        'quality', 'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
         'voice_zh', 'voice_en',
-        'sentence', 'sentence_pinyin', 'sentence_english', 'date', 'source1', 'per', 'adu']
+        'sentence', 'sentence_pinyin', 'sentence_english',
+        'date', 'source1', 'source2', 'funny', 'per', 'adu', 'slang', 'phonetic']
     sheet_url = 'https://docs.google.com/spreadsheets/d/1pw9EAIvtiWenPDBFBIf7pwTh0FvIbIR0c3mY5gJwlDk/edit#gid=0'
     sheet_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
     df = pd.read_csv(sheet_url)[cols_keep]
@@ -31,6 +32,7 @@ def load_raw_data():
     df['quality'] = df['quality'].fillna(6)
     df['per'] = df['per'].fillna(5)
     df['adu'] = df['adu'].fillna(5)
+    df['slang'] = df['slang'].fillna(5)
     df['date'] = df['date'].fillna('2025-01-02')
     return df
 

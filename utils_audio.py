@@ -171,6 +171,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sentence'].append(row['sentence'])
         dict_audio_durations['sentence_pinyin'].append(row['sentence_pinyin'])
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
+        dict_audio_durations['slang'].append(row['slang'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
@@ -196,6 +197,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
+        dict_audio_durations['slang'].append(row['slang'])
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
@@ -211,6 +213,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
+        dict_audio_durations['slang'].append(row['slang'])
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_chinese_slow'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
@@ -250,6 +253,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
+        dict_audio_durations['slang'].append(row['slang'])
         dict_audio_durations['word1'].append(row['word1'] if not pd.isna(row['word1']) else '')
         dict_audio_durations['word1_english'].append(row['word1_english'] if not pd.isna(row['word1_english']) else '')
         dict_audio_durations['word2'].append(row['word2'] if not pd.isna(row['word2']) else '')
@@ -298,6 +302,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sentence'].append(row['sentence'])
         dict_audio_durations['sentence_pinyin'].append(row['sentence_pinyin'])
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
+        dict_audio_durations['slang'].append(row['slang'])
         dict_audio_durations['word1'].append(row['word1'] if not pd.isna(row['word1']) else '')
         dict_audio_durations['word1_english'].append(row['word1_english'] if not pd.isna(row['word1_english']) else '')
         dict_audio_durations['word2'].append(row['word2'] if not pd.isna(row['word2']) else '')
@@ -349,6 +354,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sentence'].append(row['sentence'])
         dict_audio_durations['sentence_pinyin'].append(row['sentence_pinyin'])
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
+        dict_audio_durations['slang'].append(row['slang'])
         dict_audio_durations['word1'].append(row['word1'] if not pd.isna(row['word1']) else '')
         dict_audio_durations['word1_english'].append(row['word1_english'] if not pd.isna(row['word1_english']) else '')
         dict_audio_durations['word2'].append(row['word2'] if not pd.isna(row['word2']) else '')
@@ -381,6 +387,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sentence'].append(row['sentence'])
         dict_audio_durations['sentence_pinyin'].append(row['sentence_pinyin'])
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
+        dict_audio_durations['slang'].append(row['slang'])
         if data_settings['recording_id'] in ['ec_csent_scombo']:
             dict_audio_durations['word1'].append(row['word1'] if not pd.isna(row['word1']) else '')
             dict_audio_durations['word1_english'].append(row['word1_english'] if not pd.isna(row['word1_english']) else '')
@@ -411,6 +418,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sentence'].append(row['sentence'])
         dict_audio_durations['sentence_pinyin'].append(row['sentence_pinyin'])
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
+        dict_audio_durations['slang'].append(row['slang'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds)
@@ -432,6 +440,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['sentence'].append(row['sentence'])
         dict_audio_durations['sentence_pinyin'].append(row['sentence_pinyin'])
         dict_audio_durations['sentence_english'].append(row['sentence_english'])
+        dict_audio_durations['slang'].append(row['slang'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
         dict_audio_durations['d_sent'].append(sent_audio.duration_seconds)
@@ -447,6 +456,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
+        dict_audio_durations['slang'].append(row['slang'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + chinese_audio.duration_seconds + 0.3)
 
@@ -460,6 +470,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
+        dict_audio_durations['slang'].append(row['slang'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds + 0.5)
         dict_audio_durations['d_english'].append(english_audio.duration_seconds + chinese_audio.duration_seconds + 0.5)
@@ -475,6 +486,7 @@ def load_audio(row, data_settings):
         dict_audio_durations['chinese'].append(row['chinese'])
         dict_audio_durations['pinyin'].append(row['pinyin'])
         dict_audio_durations['english'].append(row['english'])
+        dict_audio_durations['slang'].append(row['slang'])
 
         dict_audio_durations['d_chinese'].append(chinese_audio.duration_seconds)
 

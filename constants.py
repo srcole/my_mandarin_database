@@ -25,8 +25,8 @@ default_settings = {
     'cat2_v3_not_allowed': None,
     'source1_values_allowed': None,
     'types_allowed_str': '',
-    'min_adu': 1,
-    'min_per': 1,
+    'min_adu': 3,
+    'min_per': 3,
     'min_date': '2025-01-01',
     'max_date': '2095-01-01',
     'filename_suffix': '',
@@ -35,8 +35,8 @@ default_settings = {
     'max_count': 1000000,
     'different_file_name': None,
     'custom_filters': None,
-    'pause_between_words_ms': 1000,
-    'pause_start_ms': 0,
+    'pause_between_words_ms': 800,
+    'pause_start_ms': 200,
     'hsk_levels_allowed': None,
     'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
@@ -47,4 +47,15 @@ default_settings = {
         'v2': 'en-US-MichelleNeural'
         },
     'silent_components': False,
+}
+
+default_video_configs = {
+    'bg_size': (1280, 720),
+    'bg_color': 'white',
+    'text_color': 'black',
+    'max_line_length_buffer_size': 60,
+    'decrease_font_step_size': 1,
+
+    'slang_icon_max': 2,
+    'slang_icon_xy': (40, 40),
 }

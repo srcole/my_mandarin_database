@@ -2,6 +2,15 @@ import pandas as pd
 import os
 from PIL import Image, ImageDraw, ImageFont
 from moviepy import ImageClip, CompositeVideoClip, AudioFileClip
+from constants import default_video_configs
+
+
+def fill_default_video_configs(video_configs):
+    for setting_key, setting_default in default_video_configs.items():
+        if setting_key not in video_configs.keys():
+            video_configs[setting_key] = setting_default
+    return video_configs
+
 
 def create_component_words_text(row):
     component_words_text = f"{row['word1']}: {row['word1_english']}\n{row['word2']}: {row['word2_english']}"
@@ -506,6 +515,11 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             fill=video_configs['sentence_line']['color'],
             width=video_configs['sentence_line']['width'],
             joint=None)
+        
+    # Draw slang indicator
+    if row['slang'] <= video_configs['slang_icon_max']:
+        slang_icon = Image.open('static/img/slang_icon.png')
+        img.paste(slang_icon, video_configs['slang_icon_xy'])
     
     # Decrease component size if 3+ components
     if 'component_words' in video_configs['vocab_slide'].keys():
