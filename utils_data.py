@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import datetime
 import os
 from constants import default_settings
@@ -19,7 +20,7 @@ def load_raw_data():
         'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'hsk_level',
         'known', 'known_pinyin_prompt', 'known_english_prompt',
         'quality', 'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
-        'voice_zh', 'voice_en',
+        'voice_zh', 'voice_en', 'video_notes',
         'sentence', 'sentence_pinyin', 'sentence_english',
         'date', 'source1', 'source2', 'funny', 'per', 'adu', 'slang', 'phonetic']
     sheet_url = 'https://docs.google.com/spreadsheets/d/1pw9EAIvtiWenPDBFBIf7pwTh0FvIbIR0c3mY5gJwlDk/edit#gid=0'
@@ -34,6 +35,7 @@ def load_raw_data():
     df['adu'] = df['adu'].fillna(5)
     df['slang'] = df['slang'].fillna(5)
     df['date'] = df['date'].fillna('2025-01-02')
+    df['sentence'] = df['sentence'].replace('-', np.nan)
     return df
 
 
@@ -73,12 +75,16 @@ def _filter_df(df, col_name, val, operator_str):
 
 def _extract_components_to_video_notes(row):
     if pd.isna(row['word1']):
-        return ''
+        return row['video_notes']
     components = []
     for i in range(1, 5):
         if pd.notna(row[f'word{i}']):
             components.append(f'{row[f'word{i}']}: {row[f'word{i}_english']}')
-    return '\n'.join(components)
+    video_notes_components = '\n'.join(components)
+    if len(row['video_notes']) > 0:
+        return row['video_notes'] + '\n--------------------\n' + video_notes_components
+    else:
+        return video_notes_components
 
 
 def filter_df_to_vocab_of_interest(df, data_settings):
@@ -127,6 +133,7 @@ def filter_df_to_vocab_of_interest(df, data_settings):
     if data_settings['sort_keys'] is not None and data_settings['sort_asc'] is not None:
         df_filt = df_filt.sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
     if data_settings['silent_components']:
+        df_filt['video_notes'] = df_filt['video_notes'].fillna('')
         df_filt['video_notes'] = df_filt.apply(_extract_components_to_video_notes, axis=1)
     df_filt = (df_filt
         .reset_index(drop=True)

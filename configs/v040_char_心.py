@@ -1,10 +1,9 @@
-from constants import NON_SENTENCE_TYPES
+from constants import WORD_TYPES, PROPER_NOUN_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '252 Chinese vocab words/phrases of the month (Aug 2025) + example sentences & character breakdown'
+video_name = '31 Chinese vocabulary words with 心 (+ example sentences)'
 video_description = '''
-This video was made for quickly practicing both Chinese listening comprehension and character recognition.
-
+This video was made for learning of Chinese vocabulary by learning many applications of a single character, and for easy review practice for both listening comprehension and character recognition.
 Words may come from HSK1, HSK2, HSK3, HSK4, HSK5, or above.
 
 Because these videos are programmatically generated, the format is customizable to quickly produce alternate formats, so please let me know if you have any corrections, suggestions, feedback, or questions, please leave a comment.
@@ -13,17 +12,14 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 '''
 
 # Main settings  # UPDATE ON NEW VIDEO
-video_number = '39'
+video_number = '40'
 data_settings = {
     'recording_id': 'ce_csent',
-    'silent_components': True,
-    'filename_suffix': '2025aug_words',
-    'types_allowed': NON_SENTENCE_TYPES,
-    'max_priority': 5,
-    'categories2_not_allowed': ['international city'],
-    'cat_v3_not_allowed': ['data', 'signs', 'apps'],
-    'min_date': '2025-08-01',
-    'max_date': '2025-09-01',
+    'filename_suffix': 'char_心',
+    'pause_start_ms': 100,
+    'contains_character': '心',
+    'exclude_words': [],
+    'types_allowed': WORD_TYPES + PROPER_NOUN_TYPES,
 }
 
 
@@ -126,7 +122,7 @@ video_configs = {
 
     'icon_configs': {
         'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-        'word': '长袖', # UPDATE ON NEW VIDEO
+        'word': '野心', # UPDATE ON NEW VIDEO
         'border_color_hex': "#1E90FF",
         'border_width': 30,
     },
@@ -134,9 +130,9 @@ video_configs = {
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': '我2025年8月的新词汇',
-    'pinyin': 'wǒ 2025 nián 8 yuè de xīn cíhuì',
-    'english': 'My new August 2025 vocabulary',
+    'chinese': '有“心”字的词',
+    'pinyin': 'yǒu “xīn” zì de cí',
+    'english': 'Words with "heart"'
     }  # UPDATE ON NEW VIDEO
 video_structure_tup = ('Chinese first, English second\nExample Chinese sentences', '先中文，后英文\n并附中文例句')
 # UPDATE ON NEW VIDEO
@@ -186,28 +182,28 @@ nonvocab_slides = {
         'change_index': None,
         'pause_ms': 500,
 
-        'y_top': 10,
-        'y_bottom': 85,
-        'x_top': 10,
-        'spacing': 0,
-        'font_size': 12,
+        'y_top': 20,
+        'y_bottom': 130,
+        'x_top': 20,
+        'spacing': 5,
+        'font_size': 26,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 2,
-        'col_space_big': 4,
+        'col_space': 5,
+        'col_space_big': 5,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 55, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 85, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 105, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 100, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 200, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 310, 'font_path': hanzi_font_path},
         }
     }
 }
 
 subtitle_text_configs = {
-    'font_size': 20,
+    'font_size': 24,
     'font_name': hanzi_font_path,
-    'y': 640,
-    'spacing': 5,
+    'y': 600,
+    'spacing': 15,
     'align': 'center',
     'fill': "#000000",
 }

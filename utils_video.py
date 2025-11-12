@@ -134,7 +134,7 @@ def combine_clips_with_audio_to_create_video(clips, nonvocab_slides, project_art
     all_clips_duration = sum(clip.duration for clip in clips_all)
     audio_video_duration_diff = audio.duration - all_clips_duration
     print(f"audio: {audio.duration:.3f}s, video: {all_clips_duration:.3f}s; difference: {audio_video_duration_diff:.3f}s")
-    if audio_video_duration_diff > 0.3:
+    if audio_video_duration_diff > 0.52:
         raise ValueError('Difference between audio and video durations too high.')
 
     # Create final video file, if doesn't already exist
@@ -485,6 +485,29 @@ def compute_text_dict_from_row(recording_id, row):
             },
     }
 
+    elif recording_id == 'cn_only_sent':
+        texts_dict = {
+        'chinese': {
+            'text': f"{row['chinese']} ({row['pinyin']})",
+            'save_clip': False,
+            },
+        'english': {'text': row['english'],
+            'save_clip': True,
+            'duration': row['start_sent'] - row['start'],
+            'timestamp_start': row['start'],
+            },
+        'sentence_chinese': {'text': row['sentence'],
+            'save_clip': False},
+        'sentence_pinyin': {'text': row['sentence_pinyin'],
+            'save_clip': False,
+            },
+        'sentence_english': {'text': row['sentence_english'],
+            'save_clip': True,
+            'duration': row['end'] - row['start_sent'],
+            'timestamp_start': row['start_sent'],
+            },
+    }
+
     else:
         raise ValueError(f'recording_id not found: {recording_id}')
     
@@ -516,10 +539,15 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
             width=video_configs['sentence_line']['width'],
             joint=None)
         
-    # Draw slang indicator
-    if row['slang'] <= video_configs['slang_icon_max']:
-        slang_icon = Image.open('static/img/slang_icon.png')
-        img.paste(slang_icon, video_configs['slang_icon_xy'])
+    # Draw slang and phonetic indicators
+    if 'slang' in row.keys():
+        if row['slang'] <= video_configs['slang_icon_max']:
+            slang_icon = Image.open('static/img/slang_icon.png')
+            img.paste(slang_icon, video_configs['slang_icon_xy'])
+    if 'phonetic' in row.keys():
+        if row['phonetic'] <= video_configs['phonetic_icon_max']:
+            phonetic_icon = Image.open('static/img/phonetic_icon.png')
+            img.paste(phonetic_icon, video_configs['phonetic_icon_xy'])
     
     # Decrease component size if 3+ components
     if 'component_words' in video_configs['vocab_slide'].keys():
@@ -530,6 +558,7 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
     # Reorder so video notes is at the desired position, and also allow it to be on multiple lines if specified
     if 'video_notes' in texts_dict.keys():
         keys_not_video_notes = [kvn for kvn in texts_dict.keys() if kvn != 'video_notes']
+        
         texts_dict = {
             kvn: texts_dict[kvn] for kvn in 
             keys_not_video_notes[:video_configs['vocab_slide']['video_notes']['video_notes_slide_index']] + 
@@ -545,7 +574,10 @@ def draw_vocab_based_on_format(recording_id, row, video_configs, current_image_f
         else:
             n_lines_max = 1
 
-    for _, text_dict in texts_dict.items():
+    for text_dict_key, text_dict in texts_dict.items():
+        if text_dict_key == 'video_notes':
+            text_dict['text'] = text_dict['text'].replace('\\n', '\n')
+            text_dict['text'] = text_dict['text'].replace('\n\n', '\n----------------\n')
         if 'n_lines_max' in text_dict.keys():
             n_lines_max_this_text = text_dict['n_lines_max'] 
         else:
@@ -675,13 +707,18 @@ def generate_word_list_slide(video_configs, word_list_configs, subtitle_text_con
 
 def generate_outro_slide(video_configs, outro_configs, subtitle_text_configs, df_audio_durations_words_only):
     # Derive more configs
-    # Derive more configs
     if 'pinyin' in outro_configs['definition_configs']:
         outro_configs['definition_configs']['pinyin']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
-        outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['pinyin']['x_offset'] + outro_configs['definition_configs']['pinyin']['x_max'] + outro_configs['col_space']
+        if 'english' in outro_configs['definition_configs']:
+            outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['pinyin']['x_offset'] + outro_configs['definition_configs']['pinyin']['x_max'] + outro_configs['col_space']
+            outro_configs['xchange'] = outro_configs['definition_configs']['english']['x_offset'] + outro_configs['definition_configs']['english']['x_max'] + outro_configs['col_space_big']
+        else:
+            outro_configs['xchange'] = outro_configs['definition_configs']['pinyin']['x_offset'] + outro_configs['definition_configs']['pinyin']['x_max'] + outro_configs['col_space_big']
     else:
-        outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
-    outro_configs['xchange'] = outro_configs['definition_configs']['english']['x_offset'] + outro_configs['definition_configs']['english']['x_max'] + outro_configs['col_space_big']
+        if 'english' in outro_configs['definition_configs']:
+            outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
+        else:
+            outro_configs['xchange'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space_big']
     outro_configs['ychange'] = outro_configs['font_size'] + outro_configs['spacing']
 
     # Initialize parameters
