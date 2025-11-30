@@ -23,7 +23,8 @@ def load_raw_data():
         'voice_zh', 'voice_en', 'video_notes',
         'sentence', 'sentence_pinyin', 'sentence_english',
         'date', 'source1', 'source2', 'funny', 'per', 'adu', 'slang', 'phonetic']
-    sheet_url = 'https://docs.google.com/spreadsheets/d/1pw9EAIvtiWenPDBFBIf7pwTh0FvIbIR0c3mY5gJwlDk/edit#gid=0'
+    with open('static/mmd_url.txt', 'r') as file:
+        sheet_url = file.read()
     sheet_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
     df = pd.read_csv(sheet_url)[cols_keep]
     df = df.dropna(subset=['chinese', 'english'])
