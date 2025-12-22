@@ -1,13 +1,12 @@
 import pandas as pd
 from collections import defaultdict
 import os
+import time
 from gtts import gTTS
 from edge_tts import list_voices, Communicate
 from moviepy import AudioFileClip
 from pydub import AudioSegment
 from pydub.exceptions import CouldntDecodeError
-from collections import defaultdict
-import time
 from utils_data import pinyin_to_tones
 
 

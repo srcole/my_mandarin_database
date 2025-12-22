@@ -38,10 +38,10 @@ default_settings = {
     'pause_between_words_ms': 800,
     'pause_start_ms': 200,
     'hsk_levels_allowed': None,
-    'voice_name_zh': 'zh-CN-XiaoyuMultilingualNeural',
+    'voice_name_zh': 'zh-CN-XiaoxiaoNeural',
     'voice_name_en': 'en-US-AvaMultilingualNeural',
     'voice_name_zh_backups': {
-        'v2': 'zh-CN-XiaozhenNeural'
+        'v2': 'zh-CN-XiaoxiaoNeural'
         },
     'voice_name_en_backups': {
         'v2': 'en-US-MichelleNeural'
