@@ -1,7 +1,7 @@
 from constants import NON_SENTENCE_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '88 family relationship vocabulary words in Mandarin Chinese + example sentences & character breakdown'
+video_name = '232 Chinese vocab words/phrases of the month (Dec 2025) + example sentences & character breakdown [Dark Mode]'
 video_description = '''
 This video was made for quickly practicing both Chinese listening comprehension and character recognition.
 
@@ -15,15 +15,17 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 # Fill in some sentences
 
 # Main settings  # UPDATE ON NEW VIDEO
-video_number = '46'
+video_number = '49'
 data_settings = {
     'recording_id': 'ce_csent',
     'silent_components': True,
-    'filename_suffix': 'family',
+    'filename_suffix': '2025dec_words',
+    'types_allowed': NON_SENTENCE_TYPES,
     'max_priority': 5,
-    'cat_v3_allowed': ['my_family'],
-    'sort_keys': ['priority', 'pinyin'],
-    'sort_asc': [True, True],
+    'min_known_english_prompt': 2,
+    'cat_v3_not_allowed': ['my_christmas', 'my_family', 'my_colors', 'my_china_spots'],
+    'min_date': '2025-12-01',
+    'max_date': '2026-01-01',
 }
 
 
@@ -32,7 +34,7 @@ output_path = 'output/videos/'
 hanzi_font_path = '/System/Library/Fonts/STHeiti Medium.ttc'
 DEFAULT_TEXT_PROPERTIES = {
     'font_path': hanzi_font_path,
-    'fill': 'black',
+    'fill': 'white',
     'spacing': 30,
     'align': 'center',
     'font_size': 50,
@@ -40,6 +42,8 @@ DEFAULT_TEXT_PROPERTIES = {
 
 # Aesthetic configs
 video_configs = {
+    'bg_color': 'black',
+    'text_color': 'white',
     'vocab_font_sizes': {
         'words': 50,
         'components': 40,
@@ -51,16 +55,16 @@ video_configs = {
         'font_size': 36,
         'x': 30,
         'y': 30,
-        'color1': "#000000",
-        'color2': "#777777",
+        'color1': "#FFFFFF",
+        'color2': "#CCCCCC",
     },
     'logo': {
         'font_name': 'Arial Black',
         'font_size': 20,
         'x': 40,
         'y': 40,
-        'color1': "#000080",
-        'color2': "#1E90FF",
+        'color1': "#3E78D6",
+        'color2': "#2FDDFC",
     },
     'previous_word': {
         'font_name': hanzi_font_path,
@@ -68,14 +72,14 @@ video_configs = {
         'spacing': 6,
         'x': 40,
         'y': 75,
-        'color': "#777777",
+        'color': "#CCCCCC",
     },
     'previous_sent': {
         'font_name': hanzi_font_path,
         'font_size': 18,
         'spacing': 6,
         'y': 75,
-        'color': "#777777",
+        'color': "#CCCCCC",
     },
     'footer_line': {
         'y': 100,
@@ -86,7 +90,7 @@ video_configs = {
     'sentence_line': {
         'y': 390,
         'x': 30,
-        'color': "#000000",
+        'color': "#FFFFFF",
         'width': 5,
     },
 
@@ -98,7 +102,7 @@ video_configs = {
         'video_notes': {
             'y': 240,
             'font_size': 28,
-            'fill': "#444444",
+            'fill': "#CCCCCC",
             'spacing': 5,
             'n_lines_max': 4,
             'video_notes_slide_index': 1,
@@ -126,7 +130,7 @@ video_configs = {
 
     'icon_configs': {
         'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-        'word': '表妹', # UPDATE ON NEW VIDEO
+        'word': '监控器', # UPDATE ON NEW VIDEO
         'border_color_hex': "#1E90FF",
         'border_width': 30,
     },
@@ -134,12 +138,12 @@ video_configs = {
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': '家人',
-    'pinyin': 'jiā rén',
-    'english': 'Family members',
+    'chinese': '我2025年12月的新词汇',
+    'pinyin': 'wǒ 2025 nián 12 yuè de xīn cíhuì',
+    'english': 'My new December 2025 vocabulary',
     }  # UPDATE ON NEW VIDEO
 video_structure_tup = ('Chinese first, English second\nExample Chinese sentences', '先中文，后英文\n并附中文例句')
-count_str_tup = ("{n_vocab_words} words", "{n_vocab_words}个单词")
+count_str_tup = ("{n_vocab_words} words", "{n_vocab_words}个词")
 # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
@@ -166,7 +170,7 @@ nonvocab_slides = {
             'y': 100,
             'spacing': 20,
             'align': 'center',
-            'fill': "#000000",
+            'fill': "#FFFFFF",
             },
             {
             'font_name': hanzi_font_path,
@@ -174,7 +178,7 @@ nonvocab_slides = {
             'y': 300,
             'spacing': 10,
             'align': 'center',
-            'fill': "#555555",
+            'fill': "#CCCCCC",
             },
             ]
     },
@@ -190,16 +194,16 @@ nonvocab_slides = {
         'y_top': 10,
         'y_bottom': 85,
         'x_top': 10,
-        'spacing': 1,
-        'font_size': 19,
-        'fill': '#000000',
+        'spacing': 0,
+        'font_size': 10,
+        'fill': '#FFFFFF',
         'align': 'left',
-        'col_space': 0,
+        'col_space': 2,
         'col_space_big': 10,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 70, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 130, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 215, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 50, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 105, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 150, 'font_path': hanzi_font_path},
         }
     }
 }
@@ -210,5 +214,5 @@ subtitle_text_configs = {
     'y': 640,
     'spacing': 5,
     'align': 'center',
-    'fill': "#000000",
+    'fill': "#FFFFFF",
 }

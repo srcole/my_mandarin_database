@@ -141,7 +141,7 @@ subtitle = {
     'english': 'My new November 2025 vocabulary',
     }  # UPDATE ON NEW VIDEO
 video_structure_tup = ('Chinese first, English second\nExample Chinese sentences', '先中文，后英文\n并附中文例句')
-count_str_tup = ("{n_vocab_words} words", "{n_vocab_words}个单词")
+count_str_tup = ("{n_vocab_words} words", "{n_vocab_words}个词")
 # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {

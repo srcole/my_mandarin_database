@@ -1,7 +1,7 @@
 from constants import NON_SENTENCE_TYPES
 
 # Basic video info - not used in program  # UPDATE ON NEW VIDEO
-video_name = '88 family relationship vocabulary words in Mandarin Chinese + example sentences & character breakdown'
+video_name = '45 Christmas vocabulary words in Chinese + example sentences in 6 minutes'
 video_description = '''
 This video was made for quickly practicing both Chinese listening comprehension and character recognition.
 
@@ -15,13 +15,13 @@ Python code to produce this video: https://github.com/srcole/my_mandarin_databas
 # Fill in some sentences
 
 # Main settings  # UPDATE ON NEW VIDEO
-video_number = '46'
+video_number = '47'
 data_settings = {
     'recording_id': 'ce_csent',
     'silent_components': True,
-    'filename_suffix': 'family',
+    'filename_suffix': 'xmas',
     'max_priority': 5,
-    'cat_v3_allowed': ['my_family'],
+    'cat_v3_allowed': ['my_christmas'],
     'sort_keys': ['priority', 'pinyin'],
     'sort_asc': [True, True],
 }
@@ -126,7 +126,7 @@ video_configs = {
 
     'icon_configs': {
         'file_suffix': '_sentence_english', # UPDATE ON NEW VIDEO
-        'word': '表妹', # UPDATE ON NEW VIDEO
+        'word': '彩灯', # UPDATE ON NEW VIDEO
         'border_color_hex': "#1E90FF",
         'border_width': 30,
     },
@@ -134,12 +134,12 @@ video_configs = {
 
 # Non-vocab slide configs
 subtitle = {
-    'chinese': '家人',
-    'pinyin': 'jiā rén',
-    'english': 'Family members',
+    'chinese': '圣诞节',
+    'pinyin': 'shèng dàn jié',
+    'english': 'Christmas',
     }  # UPDATE ON NEW VIDEO
 video_structure_tup = ('Chinese first, English second\nExample Chinese sentences', '先中文，后英文\n并附中文例句')
-count_str_tup = ("{n_vocab_words} words", "{n_vocab_words}个单词")
+count_str_tup = ("{n_vocab_words} words", "{n_vocab_words}个词")
 # UPDATE ON NEW VIDEO
 nonvocab_slides = {
     'intro': {
@@ -191,15 +191,15 @@ nonvocab_slides = {
         'y_bottom': 85,
         'x_top': 10,
         'spacing': 1,
-        'font_size': 19,
+        'font_size': 26,
         'fill': '#000000',
         'align': 'left',
-        'col_space': 0,
+        'col_space': 2,
         'col_space_big': 10,
         'definition_configs':{
-            'chinese': {'x_offset': 0, 'x_max': 70, 'font_path': hanzi_font_path},
-            'pinyin': {'x_offset': None, 'x_max': 130, 'font_path': hanzi_font_path},
-            'english': {'x_offset': None, 'x_max': 215, 'font_path': hanzi_font_path},
+            'chinese': {'x_offset': 0, 'x_max': 120, 'font_path': hanzi_font_path},
+            'pinyin': {'x_offset': None, 'x_max': 210, 'font_path': hanzi_font_path},
+            'english': {'x_offset': None, 'x_max': 290, 'font_path': hanzi_font_path},
         }
     }
 }
