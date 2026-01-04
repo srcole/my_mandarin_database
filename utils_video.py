@@ -262,7 +262,6 @@ def draw_previous_sent(draw, video_configs, previous_sent):
             )
 
 
-# Change component word font size if more than 2 components
 def compute_components_font_size(row, orig_component_font_size):
     if not pd.isna(row['word4']):
         return orig_component_font_size * .5
