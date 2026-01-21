@@ -8,10 +8,10 @@ IDIOM_TYPES = ['idiom']
 ALL_TYPES = WORD_TYPES + PHRASE_TYPES + SENT_TYPES + PROPER_NOUN_TYPES
 NON_SENTENCE_TYPES = WORD_TYPES + PHRASE_TYPES + PROPER_NOUN_TYPES
 default_settings = {
-    'min_priority': 1, 'max_priority': 4,
+    'min_priority': 1, 'max_priority': 5,
     'min_known_english_prompt': 1, 'max_known_english_prompt': 6,
     'min_known_pinyin_prompt': 1, 'max_known_pinyin_prompt': 6,
-    'sort_keys': ['cat_v3', 'cat2_v3', 'category1', 'category2', 'pinyin'],
+    'sort_keys': ['cat_v3', 'cat2_v3', 'cat3_v3', 'category1', 'category2', 'pinyin'],
     'sort_asc': [True, True, True, True, True],
     'types_allowed': ALL_TYPES,
     'min_combo_quality': 10,

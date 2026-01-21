@@ -17,7 +17,7 @@ def fill_default_settings(data_settings):
 def load_raw_data():
     cols_keep = [
         'id', 'chinese', 'pinyin', 'english',
-        'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'hsk_level',
+        'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'cat3_v3', 'hsk_level',
         'known', 'known_pinyin_prompt', 'known_english_prompt',
         'quality', 'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
         'voice_zh', 'voice_en', 'video_notes',
