@@ -2,17 +2,17 @@ import os
 
 audio_settings = {
     'voice_name_zh': 'zh-CN-XiaoxiaoNeural',
-    'audio_plan': 'ctitle_c2word',
+    'audio_plan': 'cparts_ce_csent',
     'pause_ms_beginning': 150,
-    'pause_ms_within_word': 200,
-    'pause_ms_between': 500,
+    'pause_ms_within': 300,
+    'pause_ms_between': 600,
 }
 
 
 def load_data_settings(df_categories, chosen_category):
     data_settings = {
         'category': chosen_category,
-        'output_path_base': 'output/anomia_shorts/'
+        'output_path_base': 'output/lt_shorts/'
     }
     data_settings['output_path'] = os.path.join(
         data_settings['output_path_base'],

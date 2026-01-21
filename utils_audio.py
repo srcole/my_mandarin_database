@@ -85,11 +85,11 @@ def create_tts_files_for_one_vocab_word(row, data_settings):
         create_tts_file(content_str=row['sentence'], lang_name=voice_name_zh, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         create_tts_file(content_str=row['sentence_english'], lang_name=voice_name_en, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
-    if data_settings['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent', 'ec_csent_scombo', 'ce_csent']:
+    if data_settings['recording_id'] in ['002', '011', '012', '015', 'cn_only_sent', 'ec_csent', 'ec_csent_scombo', 'ce_csent', 'cparts_ce_csent']:
         create_tts_file(content_str=row['sentence'], lang_name=voice_name_zh, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
     
     # Component words audio
-    if data_settings['recording_id'] in ['ceword_components_cesent', '006', 'ceword_components_csent', 'ec_csent_scombo']:
+    if data_settings['recording_id'] in ['ceword_components_cesent', '006', 'ceword_components_csent', 'ec_csent_scombo', 'cparts_ce_csent']:
         create_tts_file(content_str=row['word1'], lang_name=voice_name_zh, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         create_tts_file(content_str=row['word2'], lang_name=voice_name_zh, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
         create_tts_file(content_str=row['word1_english'], lang_name=voice_name_en, last_timestamp=time.time(), chinese_char=row['chinese'], recording_id=data_settings['recording_id'])
