@@ -51,7 +51,7 @@ def generate_and_zip_audio_files(voice_name, category, examples):
     shutil.make_archive(f"{category}_{current_datetime}", 'zip', category)
 
 
-def stitch_audios(audio_settings, data_settings, example_words, df_vocab_list):
+def stitch_audios(audio_settings, data_settings, example_words, df_vocab_list, part_number=1):
     dict_audio_durations = defaultdict(list)
     if audio_settings['audio_plan'] == 'ctitle_c2word':
         current_start_time = 0
@@ -174,7 +174,7 @@ def stitch_audios(audio_settings, data_settings, example_words, df_vocab_list):
                 combined, AudioSegment.from_mp3(f"{data_settings['output_path_audio']}/{current_vocab['sentence']}.mp3"), f'vocab_word_{current_vocab_idx}_sentence', current_start_time)
 
     # export the combined audio file
-    combined.export(f"{data_settings['output_path_audio']}/!combined.mp3", format="mp3")
+    combined.export(f"{data_settings['output_path_audio']}/!combined_part{part_number}.mp3", format="mp3")
     print(f'Audio duration: {combined.duration_seconds:.1f}s')
 
     # Add in static slide audio into dataframe of audio durations
@@ -238,6 +238,29 @@ def draw_lt_vocab_list_whole_image(video_configs, data_settings, df_vocab_list):
         joint=None)
     
     original_img.save(f"{data_settings['output_path_images']}/title_only.png")
+
+    # Write part number, if applicable
+    if 'current_part' in data_settings:
+        part_text_settings = {
+            'text': f"Part\n{data_settings['current_part']}/{data_settings['n_parts']}",
+            'font_path': 'Arial Black',
+            'font_size': 32,
+            'x': video_configs['bg_size'][0] - 115,
+            'y': 80 - 40,
+            'spacing': 4,
+            'align': 'center',
+            'fill': '#000000',
+            'max_line_length': 300,
+        }
+        draw.circle(
+            [video_configs['bg_size'][0] - 80, 80, 300, 300],
+            outline="#000000",
+            width=4,
+            radius=60,
+            fill=(255, 255, 255, 200),
+        )
+        draw_resized_text_on_image(draw, part_text_settings, video_configs, is_centered=False)
+        original_img.save(f"{data_settings['output_path_images']}/title_only.png")
 
     # 5. Words
     for i_row, row in df_vocab_list.iterrows():            
@@ -361,10 +384,10 @@ def create_video_with_concat_images(df_durations, df_vocab_list, data_settings):
         print(f'Adding clip: {img_file_path} for duration {duration:.1f}s')
         clips.append(ImageClip(img_file_path, duration=duration).with_start(start_time))
 
-    audio_for_video = AudioFileClip(f"{data_settings['output_path_audio']}/!combined.mp3")
+    audio_for_video = AudioFileClip(f"{data_settings['output_path_audio']}/!combined_part{data_settings['current_part']}.mp3")
     audio_duration = audio_for_video.duration
     print(f'Final audio duration: {audio_duration:.3f}s')
     final_video = CompositeVideoClip(clips)
     print(f'Final video duration before audio set: {final_video.duration:.3f}s')
     final_video.audio = audio_for_video
-    final_video.write_videofile(f"{data_settings['output_path']}/{data_settings['chinese']}_video.mp4", fps=24)
+    final_video.write_videofile(f"{data_settings['output_path']}/{data_settings['chinese']}_video_part{data_settings['current_part']}.mp4", fps=24)

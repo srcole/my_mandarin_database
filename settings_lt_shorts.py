@@ -17,11 +17,15 @@ lt_shorts_categories = {
         'english': 'Animal Classification',
         'vocab_list': ['哺乳动物', '两栖动物', '爬行动物']
     },
-    '动物分类2': {
-        'chinese': '星球',
-        'pinyin': 'xīng qiú',
+    '行星': {
+        'chinese': '行星',
+        'pinyin': 'xíng xīng',
         'english': 'planet',
-        'vocab_list': ['地球', '火星', '金星', '水星', '木星', '土星', '天王星', '海王星', '冥王星']
+        'vocab_list': [
+            ['水星', '金星', '地球'],
+            ['火星', '木星', '土星'],
+            ['天王星', '海王星', '冥王星']
+            ]
     },
 }
 
@@ -107,20 +111,9 @@ def load_video_configs():
             'font_name': 'Arial Black',
             'font_size': 20,
             'x': BG_SIZE[0] - 50,
-            'y': 1110,
+            'y': 1130,
             'color1': "#3E78D6",
             'color2': "#2FDDFC",
-        },
-
-        'category_index': {
-            'index_value': 1,
-            'index_total': 100,
-            'font_name': 'Arial Black',
-            'font_size': 48,
-            'x': 200,
-            'y': 1110,
-            'color1': "#000000",
-            'color2': "#777777",
         },
     }
     video_configs['horizontal_line']['y'] = video_configs['title_settings']['y'] + \
@@ -130,7 +123,7 @@ def load_video_configs():
         video_configs['horizontal_line']['y_gap'] + \
         2*video_configs['title_settings']['spacing']
 
-    video_configs['bottom_line']['y'] = video_configs['category_index']['y'] - \
+    video_configs['bottom_line']['y'] = video_configs['logo']['y'] - \
         video_configs['bottom_line']['y_gap']
 
     video_configs['words_settings']['y'] = video_configs['horizontal_line']['y'] + \
