@@ -14,29 +14,34 @@ def fill_default_settings(data_settings):
     return data_settings
 
 
-def load_raw_data():
-    cols_keep = [
-        'id', 'chinese', 'pinyin', 'english',
-        'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'cat3_v3', 'hsk_level',
-        'known', 'known_pinyin_prompt', 'known_english_prompt',
-        'quality', 'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
-        'voice_zh', 'voice_en', 'video_notes',
-        'sentence', 'sentence_pinyin', 'sentence_english',
-        'date', 'source1', 'source2', 'funny', 'per', 'adu', 'slang', 'phonetic']
-    with open('static/mmd_url.txt', 'r') as file:
-        sheet_url = file.read()
-    sheet_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
-    df = pd.read_csv(sheet_url)[cols_keep]
-    df = df.dropna(subset=['chinese', 'english'])
-    df['known_english_prompt'] = df['known_english_prompt'].fillna(6)
-    df['known_pinyin_prompt'] = df['known_pinyin_prompt'].fillna(6)
-    df['hsk_level'] = df['hsk_level'].fillna('MISSING')
-    df['quality'] = df['quality'].fillna(6)
-    df['per'] = df['per'].fillna(5)
-    df['adu'] = df['adu'].fillna(5)
-    df['slang'] = df['slang'].fillna(5)
-    df['date'] = df['date'].fillna('2025-01-02')
-    df['sentence'] = df['sentence'].replace('-', np.nan)
+def load_raw_data(truly_load_data=True):
+    if not truly_load_data:
+        df = pd.read_csv('static/latest_data.csv')
+        print('!!!!!!!! WARNING: not truly loading data !!!!!!!!')
+    else:
+        cols_keep = [
+            'id', 'chinese', 'pinyin', 'english',
+            'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'cat3_v3', 'hsk_level',
+            'known', 'known_pinyin_prompt', 'known_english_prompt',
+            'quality', 'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
+            'voice_zh', 'voice_en', 'video_notes',
+            'sentence', 'sentence_pinyin', 'sentence_english',
+            'date', 'source1', 'source2', 'funny', 'per', 'adu', 'slang', 'phonetic']
+        with open('static/mmd_url.txt', 'r') as file:
+            sheet_url = file.read()
+        sheet_url = sheet_url.replace('/edit#gid=', '/export?format=csv&gid=')
+        df = pd.read_csv(sheet_url)[cols_keep]
+        df = df.dropna(subset=['chinese', 'english'])
+        df['known_english_prompt'] = df['known_english_prompt'].fillna(6)
+        df['known_pinyin_prompt'] = df['known_pinyin_prompt'].fillna(6)
+        df['hsk_level'] = df['hsk_level'].fillna('MISSING')
+        df['quality'] = df['quality'].fillna(6)
+        df['per'] = df['per'].fillna(5)
+        df['adu'] = df['adu'].fillna(5)
+        df['slang'] = df['slang'].fillna(5)
+        df['date'] = df['date'].fillna('2025-01-02')
+        df['sentence'] = df['sentence'].replace('-', np.nan)
+        df.to_csv('static/latest_data.csv', index=False)
     return df
 
 
