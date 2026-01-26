@@ -174,7 +174,11 @@ def stitch_audios(audio_settings, data_settings, example_words, df_vocab_list, p
                 combined, AudioSegment.from_mp3(f"{data_settings['output_path_audio']}/{current_vocab['sentence']}.mp3"), f'vocab_word_{current_vocab_idx}_sentence', current_start_time)
 
     # export the combined audio file
-    combined.export(f"{data_settings['output_path_audio']}/!combined_part{part_number}.mp3", format="mp3")
+    if 'current_part' in data_settings.keys():
+        part_suffix = f"_part{data_settings['current_part']}"
+    else:
+        part_suffix = ''
+    combined.export(f"{data_settings['output_path_audio']}/!combined{part_suffix}.mp3", format="mp3")
     print(f'Audio duration: {combined.duration_seconds:.1f}s')
 
     # Add in static slide audio into dataframe of audio durations
@@ -384,10 +388,14 @@ def create_video_with_concat_images(df_durations, df_vocab_list, data_settings):
         print(f'Adding clip: {img_file_path} for duration {duration:.1f}s')
         clips.append(ImageClip(img_file_path, duration=duration).with_start(start_time))
 
-    audio_for_video = AudioFileClip(f"{data_settings['output_path_audio']}/!combined_part{data_settings['current_part']}.mp3")
+    if 'current_part' in data_settings.keys():
+        part_suffix = f"_part{data_settings['current_part']}"
+    else:
+        part_suffix = ''
+    audio_for_video = AudioFileClip(f"{data_settings['output_path_audio']}/!combined{part_suffix}.mp3")
     audio_duration = audio_for_video.duration
     print(f'Final audio duration: {audio_duration:.3f}s')
     final_video = CompositeVideoClip(clips)
     print(f'Final video duration before audio set: {final_video.duration:.3f}s')
     final_video.audio = audio_for_video
-    final_video.write_videofile(f"{data_settings['output_path']}/{data_settings['chinese']}_video_part{data_settings['current_part']}.mp4", fps=24)
+    final_video.write_videofile(f"{data_settings['output_path']}/{data_settings['chinese']}_video{part_suffix}.mp4", fps=24)

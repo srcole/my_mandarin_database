@@ -27,6 +27,86 @@ lt_shorts_categories = {
             ['天王星', '海王星', '冥王星']
             ]
     },
+    '动物': {
+        'chinese': '动物',
+        'pinyin': 'dòng wù',
+        'english': 'animals',
+        'vocab_list': [
+            ['猫头鹰', '老鹰', '猎鹰'],
+            ['天鹅', '火烈鸟', '孔雀'],
+            ['母鸡', '公鸡', '企鹅']
+            ]
+    },
+
+
+
+    '啮齿动物': {
+        'chinese': '啮齿动物',
+        'pinyin': 'niè chǐ dòng wù',
+        'english': 'rodents',
+        'vocab_list': [
+            ['仓鼠', '豚鼠', '松鼠'],
+            ['田鼠', '袋鼠', '花栗鼠']
+            ]
+    },
+    '昆虫': {
+        'chinese': '昆虫',
+        'pinyin': 'kūn chóng',
+        'english': 'insects',
+        'vocab_list': [
+            ['臭虫', '吸血虫', '放屁虫'],
+            ['甲虫', '白蚁', '毛毛虫'],
+            ]
+    },
+    '野生动物': {
+        'chinese': '野生动物',
+        'pinyin': 'yě shēng dòng wù',
+        'english': 'wild animals',
+        'vocab_list': [
+            ['斑马', '无尾熊', '狗熊'],
+            ['长颈鹿', '熊猫', '羊驼'],
+            ['黑猩猩', '大猩猩', '美洲虎'],
+            ['山羊', '郊狼', '野牛'],
+            ['龙猫', '鸭嘴兽', '眼镜蛇'],
+            ['浣熊', '河狸', '水牛'],
+            ['河马', '海象', '犀牛']
+            ]
+    },
+    '爬行动物': {
+        'chinese': '爬行动物',
+        'pinyin': 'pá xíng dòng wù',
+        'english': 'reptiles',
+        'vocab_list': ['壁虎', '变色龙', '响尾蛇']
+    },
+    '狗品种': {
+        'chinese': '狗品种',
+        'pinyin': 'gǒu pǐn zhǒng',
+        'english': 'dog breeds',
+        'vocab_list': [
+            ['柴犬', '金毛', '斗牛犬'],
+            ['贵宾犬', '博美', '比熊'],
+            ['边境牧羊犬', '德国牧羊犬', '母狗']
+            ]
+    },
+    '水生动物': {
+        'chinese': '水生动物',
+        'pinyin': 'shuǐ shēng dòng wù',
+        'english': 'acquatic animals',
+        'vocab_list': [
+            ['水母', '龙虾', '八爪鱼'],
+            ['食人鱼', '河豚', '海豚']
+            ]
+    },
+    '宠物': {
+        'chinese': '宠物',
+        'pinyin': 'chǒng wù',
+        'english': 'pets',
+        'vocab_list': [
+            ['兽医', '绝育', '项圈'],
+            ['毛皮', '翻肚皮', '抚摸'],
+            ['流浪狗', '铲屎官', '舔毛']
+            ]
+    },
 }
 
 def load_data_settings(current_category_dict):
