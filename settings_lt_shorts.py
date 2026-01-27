@@ -86,7 +86,9 @@ lt_shorts_categories = {
             ['柴犬', '金毛', '斗牛犬'],
             ['贵宾犬', '博美', '比熊'],
             ['边境牧羊犬', '德国牧羊犬', '母狗']
-            ]
+            ],
+        'replacements': {'bitch': 'female dog',
+                         'someone insulted her calling her a bitch': 'someone insulted her calling her a female dog'}
     },
     '水生动物': {
         'chinese': '水生动物',
@@ -105,7 +107,9 @@ lt_shorts_categories = {
             ['兽医', '绝育', '项圈'],
             ['毛皮', '翻肚皮', '抚摸'],
             ['流浪狗', '铲屎官', '舔毛']
-            ]
+            ],
+        'replacements': {'collar (pet)': 'collar',
+                         'to roll over (show belly)': 'roll over', 'shit': 'poop'}
     },
 }
 
@@ -144,7 +148,6 @@ def load_video_configs():
         'bg_color': 'white',
         'text_color': 'black',
 
-        'max_line_length': BG_SIZE[0] - 160,
         'decrease_font_step_size': 1,
         'font_path': '/System/Library/Fonts/STHeiti Medium.ttc',
 
@@ -196,6 +199,7 @@ def load_video_configs():
             'color2': "#2FDDFC",
         },
     }
+    video_configs['max_line_length'] = BG_SIZE[0] - video_configs['words_settings']['x'] - 10
     video_configs['horizontal_line']['y'] = video_configs['title_settings']['y'] + \
         video_configs['title_settings']['font_size']['chinese']+ \
         video_configs['title_settings']['font_size']['pinyin'] + \

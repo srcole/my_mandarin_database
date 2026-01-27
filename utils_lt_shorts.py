@@ -309,7 +309,7 @@ def draw_lt_vocab_list_whole_image(video_configs, data_settings, df_vocab_list):
             'spacing': video_configs['words_settings']['spacing']['components'],
             'align': 'center',
             'fill': video_configs['words_settings']['fill']['components'],
-            'max_line_length': 1000,
+            'max_line_length': video_configs['max_line_length'],
         }
         draw_resized_text_on_image(draw, text_settings, video_configs, is_centered=True)
         original_img.save(f"{data_settings['output_path_images']}/vocab_word_{i_row}_component_only.png")
@@ -326,7 +326,7 @@ def draw_lt_vocab_list_whole_image(video_configs, data_settings, df_vocab_list):
             'spacing': 0,
             'align': 'center',
             'fill': video_configs['words_settings']['fill']['vocab_word'],
-            'max_line_length': 1000,
+            'max_line_length': video_configs['max_line_length'],
         }
         draw_resized_text_on_image(draw, text_settings, video_configs, is_centered=True)
         original_img.save(f"{data_settings['output_path_images']}/vocab_word_{i_row}_full.png")
@@ -334,7 +334,6 @@ def draw_lt_vocab_list_whole_image(video_configs, data_settings, df_vocab_list):
         # Sentence
         vocab_word_text = f"{row['sentence']}\n{row['sentence_pinyin']}\n{row['sentence_english']}"
         font = ImageFont.truetype(video_configs['font_path'], video_configs['words_settings']['font_size']['vocab_word'])
-        vocab_text_length = font.getlength(vocab_word_text)
         sentence_y = non_components_y + video_configs['words_settings']['vocab_word_to_sentence_spacing'] + video_configs['words_settings']['font_size']['vocab_word']
         text_settings = {
             'text': vocab_word_text,
