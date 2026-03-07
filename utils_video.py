@@ -13,11 +13,18 @@ def fill_default_video_configs(video_configs):
 
 
 def create_component_words_text(row):
-    component_words_text = f"{row['word1']}: {row['word1_english']}\n{row['word2']}: {row['word2_english']}"
-    if not pd.isna(row['word3']):
-        component_words_text += f"\n{row['word3']}: {row['word3_english']}"
-    if not pd.isna(row['word4']):
-        component_words_text += f"\n{row['word4']}: {row['word4_english']}"
+    if row['word1'] == '-':
+        return ''
+    elif pd.isna(row['word1']):
+        return ''
+    elif pd.isna(row['word2']):
+        return ''
+    else:
+        component_words_text = f"{row['word1']}: {row['word1_english']}\n{row['word2']}: {row['word2_english']}"
+        if not pd.isna(row['word3']):
+            component_words_text += f"\n{row['word3']}: {row['word3_english']}"
+        if not pd.isna(row['word4']):
+            component_words_text += f"\n{row['word4']}: {row['word4_english']}"
     return component_words_text
 
 

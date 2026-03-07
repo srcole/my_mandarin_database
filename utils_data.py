@@ -84,7 +84,7 @@ def _extract_components_to_video_notes(row):
         return row['video_notes']
     components = []
     for i in range(1, 5):
-        if pd.notna(row[f'word{i}']):
+        if pd.notna(row[f'word{i}_english']):
             components.append(f'{row[f'word{i}']}: {row[f'word{i}_english']}')
     video_notes_components = '\n'.join(components)
     if len(row['video_notes']) > 0:
