@@ -723,6 +723,7 @@ def generate_outro_slide(video_configs, outro_configs, subtitle_text_configs, df
     else:
         if 'english' in outro_configs['definition_configs']:
             outro_configs['definition_configs']['english']['x_offset'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space']
+            outro_configs['xchange'] = outro_configs['definition_configs']['english']['x_offset'] + outro_configs['definition_configs']['english']['x_max'] + outro_configs['col_space_big']
         else:
             outro_configs['xchange'] = outro_configs['definition_configs']['chinese']['x_offset'] + outro_configs['definition_configs']['chinese']['x_max'] + outro_configs['col_space_big']
     outro_configs['ychange'] = outro_configs['font_size'] + outro_configs['spacing']

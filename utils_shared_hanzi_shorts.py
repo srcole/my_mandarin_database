@@ -63,38 +63,47 @@ data_settings_by_char = {
 #         'text_replacements': 
 #     }
 # ,
-#     '': {
-#         'shared_char': '',
-#         'char_pinyin': '',
-#         'char_english': '',
-#         'max_priority': 6,
-#         'min_adu': 3,
-#         'min_per': 3,
-#         'types_allowed': WORD_TYPES + PROPER_NOUN_TYPES,
-#         'sort_cols': ['priority', 'cat_v3', 'pinyin'],
-#         'sort_ascending': [True, True, True],
-#         'words_rmv': ,
-#         'n_words_per_video': 11,
-#         'current_part': 1,
-#         'text_replacements': 
-#     }
-# ,
-#     '': {
-#         'shared_char': '',
-#         'char_pinyin': '',
-#         'char_english': '',
-#         'max_priority': 6,
-#         'min_adu': 3,
-#         'min_per': 3,
-#         'types_allowed': WORD_TYPES + PROPER_NOUN_TYPES,
-#         'sort_cols': ['priority', 'cat_v3', 'pinyin'],
-#         'sort_ascending': [True, True, True],
-#         'words_rmv': ,
-#         'n_words_per_video': 11,
-#         'current_part': 1,
-#         'text_replacements': 
-#     }
-# ,
+    '情': {
+        'shared_char': '情',
+        'char_pinyin': 'qíng',
+        'char_english': 'emotion / feeling',
+        'max_priority': 6,
+        'min_adu': 3,
+        'min_per': 3,
+        'types_allowed': WORD_TYPES + PROPER_NOUN_TYPES,
+        'sort_cols': ['priority', 'cat_v3', 'pinyin'],
+        'sort_ascending': [True, True, True],
+        'words_rmv': ['情绪稳定', '详情', '情绪价值', '有情况'],
+        'n_words_per_video': 11,
+        'current_part': 1,
+        'text_replacements': {
+            '(facial) expression': 'facial expression',
+            'emoji;emoticon;meme': 'emoji',
+            'COVID19;epidemic situation': 'epidemic',
+            'it depends;depending on the situation': 'it depends',
+            'emotional intelligence;EQ': 'emotional intelligence',
+            'condition;state (of an illness)': 'illness state',
+            'local customs and practices': 'local customs'}
+
+    }
+,
+    '鱼': {
+        'shared_char': '鱼',
+        'char_pinyin': 'yú',
+        'char_english': 'fish',
+        'max_priority': 6,
+        'min_adu': 3,
+        'min_per': 3,
+        'types_allowed': WORD_TYPES + PROPER_NOUN_TYPES,
+        'sort_cols': ['priority', 'cat_v3', 'pinyin'],
+        'sort_ascending': [True, True, True],
+        'words_rmv': ['鱼香肉丝', '西湖醋鱼', '闲鱼', '小鱼干', '醋笋壳鱼'],
+        'n_words_per_video': 11,
+        'current_part': 1,
+        'text_replacements': {
+            'fire someone;get fired;to sack': 'get fired (slang)'}
+    }
+,
     '面': {
         'shared_char': '面',
         'char_pinyin': 'miàn',

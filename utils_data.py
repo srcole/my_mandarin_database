@@ -24,7 +24,7 @@ def load_raw_data(truly_load_data=True):
             'type', 'priority', 'category1', 'category2', 'cat_v3', 'cat2_v3', 'cat3_v3', 'hsk_level',
             'known', 'known_pinyin_prompt', 'known_english_prompt',
             'quality', 'word1', 'word1_english', 'word2', 'word2_english', 'word3', 'word3_english', 'word4', 'word4_english',
-            'voice_zh', 'voice_en', 'video_notes',
+            'voice_zh', 'voice_en', 'video_notes', 'idiom_literal',
             'sentence', 'sentence_pinyin', 'sentence_english',
             'date', 'source1', 'source2', 'funny', 'per', 'adu', 'slang', 'phonetic']
         with open('static/mmd_url.txt', 'r') as file:
@@ -136,6 +136,8 @@ def filter_df_to_vocab_of_interest(df, data_settings):
             ]
         df_filt = _filter_by_recording_type(df_filt, data_settings['recording_id'])
    
+    if data_settings['video_notes_column'] is not None:
+        df_filt['video_notes'] = df_filt[data_settings['video_notes_column']]
     if data_settings['sort_keys'] is not None and data_settings['sort_asc'] is not None:
         df_filt = df_filt.sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
     if data_settings['silent_components']:
