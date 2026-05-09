@@ -136,7 +136,7 @@ def filter_df_to_vocab_of_interest(df, data_settings):
             ]
         df_filt = _filter_by_recording_type(df_filt, data_settings['recording_id'])
    
-    if data_settings['video_notes_column'] is not None:
+    if 'video_notes_column' in data_settings.keys():
         df_filt['video_notes'] = df_filt[data_settings['video_notes_column']]
     if data_settings['sort_keys'] is not None and data_settings['sort_asc'] is not None:
         df_filt = df_filt.sort_values(data_settings['sort_keys'], ascending=data_settings['sort_asc'])
