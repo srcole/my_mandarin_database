@@ -1,7 +1,7 @@
 from datetime import date
 
 WORD_TYPES = ['word', 'prefix', 'suffix', 'abbreviation', 'multi_word', 'verb_ending']
-PHRASE_TYPES = ['phrase', 'speak_phrase', 'saying', 'idiom', 'modal particle']
+PHRASE_TYPES = ['phrase', 'speak_phrase', 'saying']
 SENT_TYPES = ['sentence']
 PROPER_NOUN_TYPES = ['proper noun']
 IDIOM_TYPES = ['idiom']
